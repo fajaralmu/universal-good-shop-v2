@@ -1,0 +1,29 @@
+package com.fajar.shoppingmart.entity;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+@Entity
+@Table(name = "authority")
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+
+public class Authority extends BaseEntity {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2534190215509155334L;
+
+	@Enumerated(EnumType.STRING)
+	private AuthorityType name;
+}
