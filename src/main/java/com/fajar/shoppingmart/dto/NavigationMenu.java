@@ -51,6 +51,8 @@ public class NavigationMenu implements Serializable {
 		
 //		menus.add(authenticatedMenu("home", "Home"));
 		menus.add(authenticatedMenu("dashboard", "Dashboard"));
+		menus.add(authenticatedMenu("transaction", "Transaction"));
+		menus.add(authenticatedMenu("masterdata", "Master Data"));
 		menus.add(authenticatedMenu("profile", "Profile"));
 		return menus ;
 	}

@@ -16,7 +16,7 @@
 					<h3 class="text-light">
 						<i class="fas fa-user-circle"></i>
 					</h3>
-					<h4 class="text-light">${userPrincipal.getUsername()}</h4>
+					<h4 class="text-light">${loggedUser.displayName }</h4>
 				</div></li>
 		</c:if>
 		<c:forEach items="${navigationMenus }" var="menu">

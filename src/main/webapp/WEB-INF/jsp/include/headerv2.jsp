@@ -32,8 +32,8 @@
 			<c:if test="${isAuthenticated == true }">
 
 				<a style="margin-right: 5px" class="btn btn-success my-2 my-sm-0"
-					href='<spring:url value="/app/profile"></spring:url>"'> <i
-					class="fas fa-user-circle"></i>&nbsp;${loggedUser.username }
+					href='<spring:url value="/app/profile"></spring:url>'> <i
+					class="fas fa-user-circle"></i>&nbsp;${loggedUser.displayName }
 				</a>
 				<a class="btn btn-danger my-2 my-sm-0"
 					href='<spring:url value="/logout"></spring:url>'> <i
