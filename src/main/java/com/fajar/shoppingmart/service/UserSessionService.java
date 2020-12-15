@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.fajar.shoppingmart.config.security.JWTUtils;
 import com.fajar.shoppingmart.dto.WebResponse;
 import com.fajar.shoppingmart.entity.User;
+import com.fajar.shoppingmart.service.config.DefaultApplicationProfileService;
 import com.fajar.shoppingmart.util.StringUtil;
 
 @Service
@@ -20,6 +21,8 @@ public class UserSessionService {
 	private JWTUtils jwtUtils;
 	@Autowired
 	private SessionValidationService sessionValidationService;
+	@Autowired
+	private DefaultApplicationProfileService defaultApplicationProfileService;
 	
 	public String generateJwt() {
 		try {
@@ -39,6 +42,7 @@ public class UserSessionService {
 			response.setUser(loggedUser);
 			response.setLoggedIn(true);
 		}
+		response.setApplicationProfile(defaultApplicationProfileService.getApplicationProfile());
 		response.setRequestId(randomRequestId());
 		return response;
 	}

@@ -40,41 +40,13 @@ public class SessionUtil {
 
 		httpResponse.addHeader(ACCESS_CONTROL_EXPOSE_HEADER, "*");
 	}
-
-	public static User getSessionUser(HttpServletRequest request) {
-		if (request.getSession(false) == null) {
-			return null;
-		}
-		try {
-			Object result = request.getSession(false).getAttribute(ATTR_USER);
-			return result == null && !(result instanceof User) ? null : (User) result;
-		} catch (Exception e) {
-			log.info("invalid session object: {}", e);
-			return null;
-		}
-	}
+ 
 
 	public static void setSessionRequestUri(HttpServletRequest request) {
 
 		request.getSession().setAttribute(ATTR_REQUEST_URI, request.getRequestURI());
 		log.info("REQUESTED URI: " + request.getRequestURI());
-	}
-
-	public static void updateSessionUser(HttpServletRequest httpRequest, User user) {
-		User currentUser = getSessionUser(httpRequest);
-		if (null == currentUser) {
-			log.info("current user session not found");
-			return;
-		}
-		 
-		user.setPassword(null);
-		setSessionUser(httpRequest, user);
-	}
-
-	public static void setSessionUser(HttpServletRequest httpRequest, User dbUser) {
-
-		httpRequest.getSession(true).setAttribute(ATTR_USER, dbUser);
-	}
+	} 
 
 	public static void removeSessionUserAndInvalidate(HttpServletRequest request) {
 
@@ -111,22 +83,7 @@ public class SessionUtil {
 		return request;
 	}
 
-	public static String getSessionPageCode(HttpServletRequest request) {
-		try {
-			return request.getSession().getAttribute(PAGE_CODE).toString();
-		} catch (Exception e) {
-
-			return null;
-		}
-	}
-
-	public static void setSessionPageCode(HttpServletRequest request, String pageCode) {
-		try {
-			request.getSession(false).setAttribute(PAGE_CODE, pageCode);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-	}
+ 
 
 	public static String getRequestToken(HttpServletRequest httpRequest) {
 		try {
@@ -146,21 +103,7 @@ public class SessionUtil {
 		return null;
 	}
 
-	public static void setUserInRequest(HttpServletRequest request, User authenticatedUser) {
-		if (null == authenticatedUser) {
-			return;
-		}
-		String requestId = getPageRequestId(request);
-		authenticatedUser.setRequestId(requestId);
-		request.setAttribute(ATTR_USER, authenticatedUser);
-	}
-
-	public static User getUserFromRequest(HttpServletRequest request) {
-		try {
-			return (User) request.getAttribute(ATTR_USER);
-		} catch (Exception e) {
-			return null;
-		}
-	}
+ 
+ 
 
 }

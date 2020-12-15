@@ -27,6 +27,7 @@ import com.fajar.shoppingmart.repository.ProductRepository;
 import com.fajar.shoppingmart.repository.SupplierRepository;
 import com.fajar.shoppingmart.service.LogProxyFactory;
 import com.fajar.shoppingmart.service.ProgressService;
+import com.fajar.shoppingmart.service.SessionValidationService;
 import com.fajar.shoppingmart.util.CollectionUtil;
 import com.fajar.shoppingmart.util.SessionUtil;
 
@@ -49,7 +50,9 @@ public class SellingAndPurchasingServiceImpl implements SellingAndPurchasingServ
 	@Autowired
 	private ProgressService progressService;
 	@Autowired
-	private ProductInventoryService productInventoryService;  
+	private ProductInventoryService productInventoryService; 
+	@Autowired
+	private SessionValidationService sessionValidationService;
 
 	@PostConstruct
 	public void init() {
@@ -70,7 +73,7 @@ public class SellingAndPurchasingServiceImpl implements SellingAndPurchasingServ
 		
 		try {
 			validateProductFlows(request);
-			User user = SessionUtil.getUserFromRequest(httpRequest);  
+			User user = sessionValidationService.getLoggedUser( httpRequest);  
 			if(request.getTransaction() != null) {
 				user.setProcessingDate(request.getTransaction().getTransactionDate());
 			}
@@ -169,7 +172,7 @@ public class SellingAndPurchasingServiceImpl implements SellingAndPurchasingServ
 		
 		try {
 			validateProductFlows(request);
-			User user = SessionUtil.getUserFromRequest(httpRequest);
+			User user =sessionValidationService.getLoggedUser(httpRequest);
 			if(request.getTransaction()!=null) {
 				user.setProcessingDate(request.getTransaction().getTransactionDate());
 			}

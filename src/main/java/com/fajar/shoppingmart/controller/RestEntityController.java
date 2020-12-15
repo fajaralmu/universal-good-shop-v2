@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/app/entities")
+@RequestMapping("/api/app/entity")
 @Slf4j
 public class RestEntityController extends BaseController {
 

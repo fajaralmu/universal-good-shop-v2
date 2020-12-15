@@ -1,8 +1,6 @@
 package com.fajar.shoppingmart.service.config;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 

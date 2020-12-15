@@ -70,6 +70,13 @@ public class ApplicationProfile extends BaseEntity {
 	@Enumerated(EnumType.STRING) 
 	private FontAwesomeIcon footerIconClass; 
 	
+	@FormField(type = FieldType.FIELD_TYPE_COLOR, required = false, defaultValue = "#1e1e1e")
+	@Column(name = "general_color")
+	private String color;
+	@FormField(type = FieldType.FIELD_TYPE_COLOR, required = false, defaultValue = "#f5f5f5")
+	@Column(name = "font_color")
+	private String fontColor;
+	
 	public String getFooterIconClassValue() {
 		if(null == footerIconClass) {
 			return "fa fa-home"; 
