@@ -88,8 +88,8 @@ public class EntityRepository {
 				EntityUpdateInterceptor updateInterceptor = ((BaseEntity) entityClass.newInstance())
 						.modelUpdateInterceptor();
 
-				log.info("Registering entity config: {}, updateServiceBean: {}", entityClass.getSimpleName(),
-						updateServiceBean);
+//				log.info("Registering entity config: {}, updateServiceBean: {}", entityClass.getSimpleName(),
+//						updateServiceBean);
 
 				putConfig(entityClass, updateServiceBean, updateInterceptor);
 			} catch (Exception e) {

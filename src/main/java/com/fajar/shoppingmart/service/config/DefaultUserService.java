@@ -33,12 +33,33 @@ public class DefaultUserService {
 	@PostConstruct
 	public void init() {
 		try {
+			checkUserAuthorities();
 			checkUser();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+
+	/**
+	 * don't invoke this method when tables has not been created yet
+	 */
+	private void checkUserAuthorities() {
+		Authority auth = authorityRepository.findTop1ByName(AuthorityType.ROLE_ADMIN);
+		if (null == auth) {
+			auth = Authority.createAdmin();
+			authorityRepository.save(auth);
+		}
+		Authority authUser = authorityRepository.findTop1ByName(AuthorityType.ROLE_USER);
+		if (null == authUser) {
+			authUser = Authority.createUser();
+			authorityRepository.save(authUser);
+		}
+	}
+
+	/**
+	 * don't invoke this method when tables has not been created yet
+	 */
 	private void checkUser() {
 		log.info("___________checkUser");
 		List<User> adminUser = userRepository.getByAuthority(AuthorityType.ROLE_ADMIN.toString());

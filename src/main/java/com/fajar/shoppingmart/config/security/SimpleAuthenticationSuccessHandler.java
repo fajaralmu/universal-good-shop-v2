@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import com.fajar.shoppingmart.controller.LoginController;
 import com.fajar.shoppingmart.dto.WebResponse;
 import com.fajar.shoppingmart.entity.AuthorityType;
+import com.fajar.shoppingmart.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -69,8 +70,13 @@ public class SimpleAuthenticationSuccessHandler implements AuthenticationSuccess
 		try {
 			String jwt = jwtUtils.generateJwtToken(authentication);
 			response.setHeader("api_token", jwt);
+			response.setHeader("Access-Control-Allow-Origin", "*");
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-			response.getWriter().write(objectMapper.writeValueAsString(WebResponse.builder().build()));
+			UserDetailDomain principal = (UserDetailDomain) authentication.getPrincipal();
+			User user = principal.getUserDetails();
+			response.getWriter().write(objectMapper.writeValueAsString(WebResponse.builder()
+					.token(jwt)
+					.user(user ).build()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

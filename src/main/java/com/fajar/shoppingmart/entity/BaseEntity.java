@@ -45,9 +45,12 @@ public class BaseEntity implements Serializable{
 	@Column(name = "modified_date")
 	@JsonIgnore
 	private Date modifiedDate;
+	@Column(name = "deleted_date")
+	@JsonIgnore
+	private Date deletedDate;
 	@Column(name = "deleted")
 	@JsonIgnore
-	private Date deleted;
+	private boolean deleted;
 	 
 
 	 
@@ -68,13 +71,18 @@ public class BaseEntity implements Serializable{
 		this.modifiedDate = modifiedDate;
 	}
 
-	 public void setDeleted(Date deleted) {
-		this.deleted = deleted;
-	}
-	 public Date getDeleted() {
+	 public boolean isDeleted() {
 		return deleted;
 	}
-
+	 public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	 public Date getDeletedDate() {
+		return deletedDate;
+	}
+	 public void setDeletedDate(Date deletedDate) {
+		this.deletedDate = deletedDate;
+	}
 	public Long getId() {
 		return id;
 	}

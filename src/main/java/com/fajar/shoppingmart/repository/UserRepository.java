@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository< User	, Long> {
 	 * @param authorityType {@linkplain com.fajar.entity.AuthorityType}
 	 * @return
 	 */
-	@Query(value="select from users left join user_authority " + 
+	@Query(value="select * from users left join user_authority " + 
 			"on users.id = user_authority.user_id " + 
 			"left join authority on authority.id = user_authority.authority_id " + 
 			"where authority.name = ?1", nativeQuery = true)

@@ -34,9 +34,9 @@ public class BaseController {
 	
 	protected String basePage = "BASE_PAGE";
 	@Autowired
-	private SessionValidationService sessionValidationService;
+	protected SessionValidationService sessionValidationService;
 	@Autowired
-	private UserSessionService userSessionService;
+	protected UserSessionService userSessionService;
 	 
 	@Autowired
 	protected BindedValues bindedValues;

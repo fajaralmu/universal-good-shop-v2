@@ -39,8 +39,16 @@
 	</bean>
 
 	<!-- <bean id="sessionFactory" class="org.hibernate.internal.SessionFactoryImpl"/> -->
-
-	<bean id="dataSource_OFFLINE"
+<bean id="dataSource_OFFLINE_mysql"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/goodshopv2" />
+		<property name="username" value="root" />
+		<property name="password" value="" />
+	</bean>
+	<!-- <bean id="dataSource_OFFLINE"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName"
 			value="org.postgresql.Driver" />
@@ -48,20 +56,20 @@
 			value="jdbc:postgresql://localhost:5432/universal_commerce" />
 		<property name="username" value="postgres" />
 		<property name="password" value="root" />
-	</bean>
+	</bean> -->
 	 
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="packagesToScan"
 			value="com.fajar.shoppingmart*" />
-		<property name="dataSource" ref="dataSource_OFFLINE" /><!-- <property 
+		<property name="dataSource" ref="dataSource_OFFLINE_mysql" /><!-- <property 
 			name="sessionFactory" ref="sessionFactory"></property> -->
 		<property name="jpaProperties">
 			<props>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
-				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop> -->
-				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+				 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop> -->
 				<prop key="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext
 				</prop>
 			</props>

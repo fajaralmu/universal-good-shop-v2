@@ -20,8 +20,11 @@
 	<http auto-config="true" >
 	 	<custom-filter before="PRE_AUTH_FILTER" ref="jwtAuthFilter"/>
 		<intercept-url pattern="/public/**" access="permitAll" /> 
-		<intercept-url pattern="/app/**"  access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" />
-		<intercept-url pattern="/api/app/**"  access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" />
+		<intercept-url pattern="/app/**" method="POST"   access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" />
+		
+		<intercept-url pattern="/api/public/**" access="permitAll" /> 
+		<intercept-url pattern="/api/app/**" method="POST"  access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" />
+		
 		<form-login login-page="/login.html"
 			default-target-url="/app/dashboard"  username-parameter="username"
 			password-parameter="password" always-use-default-target="true"

@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Component;
 
+import com.fajar.shoppingmart.config.security.JWTAuthFilter;
 import com.fajar.shoppingmart.util.StringUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +52,11 @@ public class CustomFilter implements javax.servlet.Filter {
         
         chain.doFilter(request, response);
         HttpServletResponse res = (HttpServletResponse) response;
-        
+        if (req.getMethod().toLowerCase().equals("options")) {
+			log.info("PRE HANDLE SET CORS HEADER: {}", req.getRequestURI());
+			JWTAuthFilter.setCorsHeaders(res);
+			res.setHeader("print_id", randomID);
+		}
         Date endTime = new Date();
          
         /*

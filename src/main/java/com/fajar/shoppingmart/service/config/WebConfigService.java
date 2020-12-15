@@ -77,7 +77,7 @@ public class WebConfigService {
 				continue;
 			Class<?>[] interfaces = beanObject.getClass().getInterfaces();
 
-			log.info("beanObject: {}", beanObject);
+//			log.info("beanObject: {}", beanObject);
 			if (null == interfaces)
 				continue;
 

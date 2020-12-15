@@ -29,8 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/app/transaction")
-@Slf4j 
-@Authenticated
+@Slf4j
 public class RestTransactionController extends BaseController{
 	
 	@Autowired

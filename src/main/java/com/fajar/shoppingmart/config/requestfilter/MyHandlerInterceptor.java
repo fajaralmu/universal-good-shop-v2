@@ -8,6 +8,8 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.fajar.shoppingmart.config.security.JWTAuthFilter;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -25,13 +27,9 @@ public class MyHandlerInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		 
+
 		log.info("[preHandle][" + request + "]" + "[" + request.getMethod() + "]");
-		
-		if (request.getMethod().toLowerCase().equals("options")) {
-			return true;
-		}
-		
+
 		HandlerMethod handlerMethod = interceptorProcessor.getHandlerMethod(request);
 
 		if (handlerMethod != null && interceptorProcessor.isApi(handlerMethod)) {
@@ -51,7 +49,6 @@ public class MyHandlerInterceptor extends HandlerInterceptorAdapter {
 			interceptorProcessor.postHandle(request, response, (HandlerMethod) handler, modelAndView);
 
 		}
-
 		super.postHandle(request, response, handler, modelAndView);
 	}
 

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,7 +32,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		log.info("___________JWTAuthFilter____________");
+		log.info("___________JWTAuthFilter____________{}", request.getRequestURI());
 		try {
 			String jwt = parseJwt(request);
 			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
@@ -43,14 +44,33 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				log.info("JWT Authenticated..");
 				SecurityContextHolder.getContext().setAuthentication(authentication);
+				
+				
+			} else {
+//				log.info("jwt is null");
 			}
 		} catch (Exception e) {
 			log.error("Cannot set user authentication: {}", e);
 		}
-
+		if (request.getMethod().toLowerCase().equals("options")) {
+			setCorsHeaders(response);
+		}
 		filterChain.doFilter(request, response);
+		if (request.getMethod().toLowerCase().equals("options")) {
+			response.setStatus(HttpStatus.OK.value());
+		}
 	}
 
+	public static void setCorsHeaders(HttpServletResponse response) {
+		log.info("setCorsHeaders.....");
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		response.setHeader("Access-Control-Max-Age", "3600");
+		response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Authorization, requestid");
+//		response.setStatus(HttpStatus.OK.value());
+		
+	}
 	private String parseJwt(HttpServletRequest request) {
 		String headerAuth = request.getHeader("Authorization");
 

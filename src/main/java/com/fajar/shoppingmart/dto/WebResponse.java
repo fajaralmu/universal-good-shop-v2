@@ -66,6 +66,7 @@ public class WebResponse implements Serializable {
 	private int[] transactionYears;
 	 
 	private String requestId; 
+	private String token;
 
 	private Map<Integer, CashFlow> monthlyDetailIncome;
 	private Map<Integer, CashFlow> monthlyDetailCost;

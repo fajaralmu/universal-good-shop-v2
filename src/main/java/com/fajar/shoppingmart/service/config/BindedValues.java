@@ -38,11 +38,11 @@ public class BindedValues {
 		printBeans();
 	}
 	public void printBeans() {
-		List<String> list = (Arrays.asList(applicationContext.getBeanDefinitionNames()));
-		for (String string : list) {
-			log.info("bean: {} ", string);
-			
-		} 
+//		List<String> list = (Arrays.asList(applicationContext.getBeanDefinitionNames()));
+//		for (String string : list) {
+//			log.info("bean: {} ", string);
+//			
+//		} 
 		
 		
 		

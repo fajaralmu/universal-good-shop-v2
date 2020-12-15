@@ -26,4 +26,13 @@ public class Authority extends BaseEntity {
 
 	@Enumerated(EnumType.STRING)
 	private AuthorityType name;
+
+	public static Authority createAdmin() {
+		// TODO Auto-generated method stub
+		return Authority.builder().name(AuthorityType.ROLE_ADMIN).build();
+	}
+	public static Authority createUser() {
+		// TODO Auto-generated method stub
+		return Authority.builder().name(AuthorityType.ROLE_USER).build();
+	}
 }
