@@ -186,7 +186,7 @@ public class InterceptorProcessor {
 				return handlerMethod;
 			}
 		} catch (Exception e) {
-			log.warn("Lookup the handler method ERROR", e);
+			//log.warn("Lookup the handler method ERROR", e);
 		} finally {
 			log.debug("URI = " + request.getRequestURI() + ", handlerMethod = " + handlerMethod);
 		}
