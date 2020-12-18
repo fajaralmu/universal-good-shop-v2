@@ -9,6 +9,7 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -309,6 +310,9 @@ public class EntityUtil {
 	public static boolean isNumericField(Field field) {
 		return field.getType().equals(Integer.class) || field.getType().equals(Double.class)
 				|| field.getType().equals(Long.class) || field.getType().equals(BigDecimal.class)
+				|| field.getType().equals(int.class)
+				|| field.getType().equals(long.class)
+				|| field.getType().equals(double.class)
 				|| field.getType().equals(BigInteger.class);
 	}
 
@@ -460,6 +464,17 @@ public class EntityUtil {
 			log.error("Error casting object: {}", o.getClass());
 			throw e;
 		}
+	}
+
+	public static boolean hasInterface(Class class1, Class _interface) {
+		Class[] interfaces = class1.getInterfaces();
+		for (int i = 0; i < interfaces.length; i++) {
+			if (interfaces[i].equals(_interface)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 }

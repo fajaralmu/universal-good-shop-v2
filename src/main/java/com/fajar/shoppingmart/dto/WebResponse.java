@@ -13,6 +13,7 @@ import com.fajar.shoppingmart.entity.ApplicationProfile;
 import com.fajar.shoppingmart.entity.Transaction;
 import com.fajar.shoppingmart.entity.User;
 import com.fajar.shoppingmart.entity.custom.CashFlow;
+import com.fajar.shoppingmart.entity.setting.EntityProperty;
 import com.fajar.shoppingmart.util.CollectionUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -56,6 +57,7 @@ public class WebResponse implements Serializable {
 	private Transaction transaction;
 	private ProductFlowStock productFlowStock;
 	private Map<String, Object> storage;
+	private EntityProperty entityProperty;
 	
 	private Long maxValue;
 	private Integer quantity;

@@ -79,6 +79,12 @@ public class RestEntityController extends BaseController {
 		return entityProperty;
 
 	}
+	@PostMapping(value = "/configv2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public WebResponse configv2(@RequestBody WebRequest request, HttpServletRequest httpRequest,
+			HttpServletResponse httpResponse) {
+		return WebResponse.builder().entityProperty(config(request, httpRequest, httpResponse)).build();
+
+	}
 
 	@PostMapping(value = "/managementpages", produces = MediaType.APPLICATION_JSON_VALUE)
 	public WebResponse managementpages() {

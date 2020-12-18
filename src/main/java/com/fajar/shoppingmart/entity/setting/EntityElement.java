@@ -88,6 +88,7 @@ public class EntityElement implements Serializable {
 	private BaseField baseField;
 	@JsonIgnore
 	public Map<String, List<?>> additionalMap;
+	final FieldType fieldType;
 
 //	public static void main(String[] args) {
 //		String json = "[{\\\"serialVersionUID\\\":\\\"4969863194918869183\\\",\\\"name\\\":\\\"Kebersihan\\\",\\\"description\\\":\\\"1111111\\t\\t\\t\\t\\t\\\",\\\"serialVersionUID\\\":\\\"-8161890497812023383\\\",\\\"id\\\":1,\\\"color\\\":null,\\\"fontColor\\\":null,\\\"createdDate\\\":\\\"2020-05-14 21:06:03.0\\\",\\\"modifiedDate\\\":\\\"2020-05-14 21:06:03.0\\\",\\\"deleted\\\":\\\"false\\\"},{\\\"serialVersionUID\\\":\\\"4969863194918869183\\\",\\\"name\\\":\\\"Mukafaah\\\",\\\"description\\\":\\\"dfdffd\\\",\\\"serialVersionUID\\\":\\\"-8161890497812023383\\\",\\\"id\\\":2,\\\"color\\\":\\\"#000000\\\",\\\"fontColor\\\":\\\"#000000\\\",\\\"createdDate\\\":\\\"2020-05-12 21:16:58.0\\\",\\\"modifiedDate\\\":\\\"2020-05-12 21:16:58.0\\\",\\\"deleted\\\":\\\"false\\\"},{\\\"serialVersionUID\\\":\\\"4969863194918869183\\\",\\\"name\\\":\\\"Alat Tulis\\\",\\\"description\\\":\\\"alat tulis kantor\\t\\t\\t\\t\\t\\t\\\",\\\"serialVersionUID\\\":\\\"-8161890497812023383\\\",\\\"id\\\":3,\\\"color\\\":null,\\\"fontColor\\\":null,\\\"createdDate\\\":\\\"2020-05-12 21:56:36.0\\\",\\\"modifiedDate\\\":\\\"2020-05-12 21:56:36.0\\\",\\\"deleted\\\":\\\"false\\\"}]";
@@ -99,7 +100,12 @@ public class EntityElement implements Serializable {
 		this.ignoreBaseField = entityProperty.isIgnoreBaseField();
 		this.entityProperty = entityProperty;
 		this.isGrouped = entityProperty.isQuestionare();
-
+		formField = field.getAnnotation(FormField.class);
+		if (formField!= null) {
+			this.fieldType = formField.type();
+		}else {
+			this.fieldType = FieldType.FIELD_TYPE_TEXT;
+		}
 		init();
 	}
 
@@ -109,11 +115,17 @@ public class EntityElement implements Serializable {
 		this.entityProperty = entityProperty;
 		this.additionalMap = additionalMap;
 		this.isGrouped = entityProperty.isQuestionare();
+		formField = field.getAnnotation(FormField.class);
+		if (formField!= null) {
+			this.fieldType = formField.type();
+		}else {
+			this.fieldType = FieldType.FIELD_TYPE_TEXT;
+		}
 		init();
 	}
 
 	private void init() {
-		formField = field.getAnnotation(FormField.class);
+		
 		baseField = field.getAnnotation(BaseField.class);
 
 		idField = field.getAnnotation(Id.class) != null;

@@ -145,6 +145,14 @@ public class RestTransactionController extends BaseController{
 		return response;
 	}
 	
+	@Authenticated
+	@PostMapping(value = "/balance", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public WebResponse getBalance(@RequestBody WebRequest request) {
+		
+		WebResponse response = transactionHistoryService.getBalance(request);
+		return response;
+	}
+	
 	
 
 }
