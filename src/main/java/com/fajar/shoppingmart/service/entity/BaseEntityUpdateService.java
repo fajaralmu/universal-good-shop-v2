@@ -88,14 +88,13 @@ public class BaseEntityUpdateService<T extends BaseEntity> {
 				Field field = fields.get(i);
 
 				try {
-
 					FormField formfield = field.getAnnotation(FormField.class);
 					if (null == formfield) {
 						continue;
 					}
 
 					Object fieldValue = field.get(object);
-
+					log.info("validating field: {}, type: {}", field.getName(), formfield.type());
 					switch (formfield.type()) {
 					case FIELD_TYPE_IMAGE:
 

@@ -83,6 +83,8 @@ public class EntityManagementPageService {
 		result.add(entityRepository.getConfig("unit"));
 		result.add(entityRepository.getConfig("customer"));
 		result.add(entityRepository.getConfig("transaction")); 
+		result.add(entityRepository.getConfig("page")); 
+		result.add(entityRepository.getConfig("menu")); 
 		
 		return WebResponse.builder().generalList(result).build();
 	}

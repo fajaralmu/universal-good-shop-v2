@@ -44,13 +44,13 @@ public class RestEntityController extends BaseController {
 
 	@PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public WebResponse add(@RequestBody WebRequest request, HttpServletRequest httpRequest) {
-		log.info("add entity {}", request);
+		log.info("add entity {}", request.getEntity());
 		return entityService.saveEntity(request, httpRequest, true);
 	}
 
 	@PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public WebResponse update(@RequestBody WebRequest request, HttpServletRequest httpRequest) {
-		log.info("register update {}", request);
+		log.info("register update {}", request.getEntity());
 		return entityService.saveEntity(request, httpRequest, false);
 
 	}
