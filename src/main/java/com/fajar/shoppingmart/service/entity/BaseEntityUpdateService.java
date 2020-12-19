@@ -98,12 +98,16 @@ public class BaseEntityUpdateService<T extends BaseEntity> {
 
 					Object fieldValue = field.get(object);
 					log.info("validating field: {}, type: {}", field.getName(), formfield.type());
+					if (fieldValue == null) {
+						log.info("!! Skipping null-valued field: {}", field.getName());
+						continue;
+					}
 					switch (formfield.type()) {
 					case FIELD_TYPE_IMAGE:
 						Object existingImage = field.get(existingEntity);
-						boolean isUpdateRecord = (null != existingImage && newRecord == false);
+						boolean isUpdateRecord =  newRecord == false;
 						
-						if (isUpdateRecord && (fieldValue == null || existingImage.equals(fieldValue))) {
+						if (isUpdateRecord || existingImage.equals(fieldValue)) {
 							field.set(object, existingImage);
 						} else {
 							String imageName = updateImage(field, object, formfield.iconImage());
@@ -111,8 +115,7 @@ public class BaseEntityUpdateService<T extends BaseEntity> {
 						}
 						break;
 					case FIELD_TYPE_FIXED_LIST:
-						if (fieldValue == null)
-							break;
+						
 						if (formfield.multipleSelect()) {
 							String storeToFieldName = field.getAnnotation(StoreValueTo.class).value(); 
 							

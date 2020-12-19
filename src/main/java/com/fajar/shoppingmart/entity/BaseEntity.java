@@ -2,7 +2,10 @@ package com.fajar.shoppingmart.entity;
 
 import java.beans.Transient;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -16,11 +19,14 @@ import org.hibernate.annotations.Type;
 import com.fajar.shoppingmart.annotation.BaseField;
 import com.fajar.shoppingmart.annotation.Dto;
 import com.fajar.shoppingmart.annotation.FormField;
-import com.fajar.shoppingmart.dto.FieldType;
 import com.fajar.shoppingmart.entity.custom.EntityUpdateInterceptor;
+import com.fajar.shoppingmart.util.EntityUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Dto
+@Slf4j
 @MappedSuperclass
 public class BaseEntity implements Serializable{
 
@@ -52,8 +58,15 @@ public class BaseEntity implements Serializable{
 	@JsonIgnore
 	private boolean deleted;
 	 
+	private List<String> nulledFields = new ArrayList<>();
+	
+	public List<String> getNulledFields() {
+		return nulledFields;
+	}
 
-	 
+	public void setNulledFields(List<String> nulledFields) {
+		this.nulledFields = nulledFields;
+	}
 
 	public Date getCreatedDate() { 
 		return createdDate;
@@ -111,5 +124,17 @@ public class BaseEntity implements Serializable{
 				return object;
 			}
 		};
+	}
+	
+	public void validateNullValues () {
+		for (int i = 0; i < this.nulledFields.size(); i++) {
+			String fieldName = this.nulledFields.get(i);
+			try {
+				Field field = EntityUtil.getDeclaredField(getClass(), fieldName);
+				field.set(this, null);
+				log.info("Set {} NULL", field.getName());
+			} catch (Exception e) {
+			}
+		}
 	}
 }

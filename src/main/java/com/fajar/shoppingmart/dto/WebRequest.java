@@ -83,7 +83,7 @@ public class WebRequest implements Serializable {
 	private List<BaseEntity> orderedEntities;
 	
 	@Builder.Default
-	private List<ProductFlow> productFlows = new ArrayList<ProductFlow>();
+	private List<ProductFlow> productFlows = new ArrayList<>();
 	
 	private boolean regularTransaction;
 	

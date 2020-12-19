@@ -3,6 +3,9 @@ package com.fajar.shoppingmart.dto;
 public enum FieldType {
 
 	 FIELD_TYPE_TEXT ( "text"),
+	 /**
+	  * leave this field as null will remove value, leave as old value wont update field
+	  */
 	 FIELD_TYPE_IMAGE ( "img"),
 	 FIELD_TYPE_CURRENCY ( "number"),
 	 FIELD_TYPE_NUMBER ( "number"),
