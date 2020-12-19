@@ -81,6 +81,9 @@ public class BaseEntityUpdateService<T extends BaseEntity> {
 			BaseEntity existingEntity = null;
 			if (!newRecord) {
 				existingEntity = (BaseEntity) entityRepository.findById(object.getClass(), object.getId());
+				if (null == existingEntity) {
+					throw new Exception("Existing Entity Not Found");
+				}
 			}
 
 			List<Field> fields = EntityUtil.getDeclaredFields(object.getClass());
@@ -97,9 +100,10 @@ public class BaseEntityUpdateService<T extends BaseEntity> {
 					log.info("validating field: {}, type: {}", field.getName(), formfield.type());
 					switch (formfield.type()) {
 					case FIELD_TYPE_IMAGE:
-
-						if (newRecord == false && fieldValue == null && existingEntity != null) {
-							Object existingImage = field.get(existingEntity);
+						Object existingImage = field.get(existingEntity);
+						boolean isUpdateRecord = (null != existingImage && newRecord == false);
+						
+						if (isUpdateRecord && (fieldValue == null || existingImage.equals(fieldValue))) {
 							field.set(object, existingImage);
 						} else {
 							String imageName = updateImage(field, object, formfield.iconImage());
