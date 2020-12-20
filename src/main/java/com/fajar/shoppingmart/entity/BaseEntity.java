@@ -57,7 +57,7 @@ public class BaseEntity implements Serializable{
 	@Column(name = "deleted")
 	@JsonIgnore
 	private boolean deleted;
-	 
+	@javax.persistence.Transient
 	private List<String> nulledFields = new ArrayList<>();
 	
 	public List<String> getNulledFields() {

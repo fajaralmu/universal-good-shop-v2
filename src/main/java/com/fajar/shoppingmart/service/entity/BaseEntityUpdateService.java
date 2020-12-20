@@ -84,6 +84,7 @@ public class BaseEntityUpdateService<T extends BaseEntity> {
 				if (null == existingEntity) {
 					throw new Exception("Existing Entity Not Found");
 				}
+				object.validateNullValues();
 			}
 
 			List<Field> fields = EntityUtil.getDeclaredFields(object.getClass());
