@@ -38,7 +38,7 @@ public class BaseEntityUpdateService<T extends BaseEntity> {
 		LogProxyFactory.setLoggers(this);
 	}
 
-	public WebResponse saveEntity(T baseEntity, boolean newRecord ) {
+	public WebResponse saveEntity(T baseEntity, boolean newRecord ) throws Exception {
 		log.error("saveEntity Method not implemented");
 		return WebResponse.failed("method not implemented");
 	}
