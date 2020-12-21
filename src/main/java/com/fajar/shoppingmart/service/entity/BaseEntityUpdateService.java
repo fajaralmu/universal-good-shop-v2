@@ -105,11 +105,15 @@ public class BaseEntityUpdateService<T extends BaseEntity> {
 					}
 					switch (formfield.type()) {
 					case FIELD_TYPE_IMAGE:
-						Object existingImage = field.get(existingEntity);
+						
 						boolean isUpdateRecord =  newRecord == false;
 						
-						if (isUpdateRecord || existingImage.equals(fieldValue)) {
-							field.set(object, existingImage);
+						if (isUpdateRecord &&  fieldValue.equals(field.get(existingEntity))) {
+							Object existingImage = field.get(existingEntity);
+							log.info("existingImage : {}", existingImage);
+							if ( existingImage.equals(fieldValue)) {
+								field.set(object, existingImage);
+							}
 						} else {
 							String imageName = updateImage(field, object, formfield.iconImage());
 							field.set(object, imageName);
@@ -156,6 +160,7 @@ public class BaseEntityUpdateService<T extends BaseEntity> {
 	 * @return
 	 */
 	private String updateImage(Field field, BaseEntity object, boolean isIcon) {
+		log.info("updating image {}", field.getName());
 		try {
 			Object base64Value = field.get(object);
 			return writeImage(object, base64Value, isIcon);

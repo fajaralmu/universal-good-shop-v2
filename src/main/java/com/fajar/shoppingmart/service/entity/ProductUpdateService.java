@@ -107,15 +107,17 @@ public class ProductUpdateService extends BaseEntityUpdateService<Product> {
 	}
 
 	private String updateImages(Product product, Optional<Product> dbProduct, String imageData) {
-		String[] rawImageList = imageData.split("~");
+		final String[] rawImageList = imageData.split("~");
 		if (rawImageList == null || rawImageList.length == 0 || dbProduct.isPresent() == false) {
 			return null;
 		}
 		final boolean oldValueExist = dbProduct.get().getImageUrl() != null
 				&& dbProduct.get().getImageUrl().split("~").length > 0;
-		List<String> imageUrls = new ArrayList<>();
+		final String[] oldValueStringArr = oldValueExist ? product.getImageUrl().split("~") : new String[] {};
+		final List<String> imageUrls = new ArrayList<>();
+		//loop
 		for (int i = 0; i < rawImageList.length; i++) {
-			String rawImage = rawImageList[i];
+			final String rawImage = rawImageList[i];
 			if (rawImage == null || rawImage.equals(""))
 				continue;
 			String imageName = null;
@@ -126,12 +128,12 @@ public class ProductUpdateService extends BaseEntityUpdateService<Product> {
 					e.printStackTrace();
 				}
 			} else {
-				String[] oldValueStringArr = product.getImageUrl().split("~");
+
 				if (oldValueExist && inArray(rawImage, oldValueStringArr)) {
 					imageName = rawImage;
 				}
 			}
-			
+
 			if (imageName != null) {
 				imageUrls.add(imageName);
 			}
@@ -154,6 +156,7 @@ public class ProductUpdateService extends BaseEntityUpdateService<Product> {
 			if (imageName.equals(array[i]))
 				return true;
 		}
+		
 		return false;
 	}
 
