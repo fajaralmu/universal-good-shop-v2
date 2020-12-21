@@ -43,9 +43,8 @@ public class ProductUpdateService extends BaseEntityUpdateService<Product> {
 		Optional<Product> dbProduct = Optional.empty();
 		if (!newRecord) {
 			dbProduct = productRepository.findById(product.getId());
-			if (dbProduct.isPresent()) {
-				product.setImageUrl(dbProduct.get().getImageUrl());
-			} else {
+			if (!dbProduct.isPresent()) {
+			 
 				throw new Exception("Existing record not found");
 			}
 		}
@@ -116,6 +115,7 @@ public class ProductUpdateService extends BaseEntityUpdateService<Product> {
 		final String[] oldValueStringArr = oldValueExist ? product.getImageUrl().split("~") : new String[] {};
 		final List<String> imageUrls = new ArrayList<>();
 		//loop
+		log.info("rawImageList length: {}", rawImageList.length);
 		for (int i = 0; i < rawImageList.length; i++) {
 			final String rawImage = rawImageList[i];
 			if (rawImage == null || rawImage.equals(""))
@@ -124,6 +124,7 @@ public class ProductUpdateService extends BaseEntityUpdateService<Product> {
 			if (isBase64(rawImage)) {
 				try {
 					imageName = fileService.writeImage(product.getClass().getSimpleName(), rawImage);
+					log.info("saved base64 image {}", imageName);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

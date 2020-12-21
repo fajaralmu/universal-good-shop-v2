@@ -86,7 +86,7 @@ public class EntityService {
 				Field entityField = EntityUtil.getDeclaredField(WebRequest.class, fieldName);
 				entityValue = entityField.get(request);
 
-				log.info("save {}: {}", entityField.getName(), entityValue);
+				log.info("save {}", entityField.getName());
 				log.info("newRecord: {}", newRecord);
 				
 				if (entityValue != null) {
