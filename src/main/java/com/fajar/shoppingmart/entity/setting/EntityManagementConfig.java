@@ -9,10 +9,12 @@ import com.fajar.shoppingmart.service.entity.BaseEntityUpdateService;
 import com.fajar.shoppingmart.util.EntityUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @Builder
@@ -28,6 +30,12 @@ public class EntityManagementConfig implements Serializable {
 	@JsonIgnore
 	private String fieldName;
 	private boolean disabled;
+	private String iconClassName;
+	
+	public EntityManagementConfig setIconClassName(String iconClassName) {
+		this.iconClassName = iconClassName;
+		return this;
+	}
 
 	public EntityManagementConfig(String fieldName, Class<? extends BaseEntity> entityClass,
 			BaseEntityUpdateService service, EntityUpdateInterceptor updateInterceptor) {

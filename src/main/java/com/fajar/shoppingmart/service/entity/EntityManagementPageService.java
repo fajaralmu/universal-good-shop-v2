@@ -78,13 +78,14 @@ public class EntityManagementPageService {
 	public WebResponse getManagementPages() {
 		
 		List<Object> result = new ArrayList<>();
-		result.add(entityRepository.getConfig("product"));
-		result.add(entityRepository.getConfig("category"));
-		result.add(entityRepository.getConfig("unit"));
-		result.add(entityRepository.getConfig("customer"));
-		result.add(entityRepository.getConfig("transaction")); 
-		result.add(entityRepository.getConfig("page")); 
-		result.add(entityRepository.getConfig("menu")); 
+		result.add(entityRepository.getConfig("product").setIconClassName("fas fa-cubes"));
+		result.add(entityRepository.getConfig("category").setIconClassName("fas fa-tags"));
+		result.add(entityRepository.getConfig("unit").setIconClassName("fas fa-balance-scale"));
+		result.add(entityRepository.getConfig("customer").setIconClassName("fas fa-users"));
+		result.add(entityRepository.getConfig("supplier").setIconClassName("fas fa-dolly-flatbed"));
+		result.add(entityRepository.getConfig("transaction").setIconClassName("fas fa-book")); 
+//		result.add(entityRepository.getConfig("page")); 
+//		result.add(entityRepository.getConfig("menu")); 
 		
 		return WebResponse.builder().generalList(result).build();
 	}
