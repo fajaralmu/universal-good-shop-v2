@@ -75,7 +75,7 @@ public class WebResponse implements Serializable {
 
 	private Map<String, CashFlow> dailyCashflow;
 
-	private boolean loggedIn;
+	private Boolean loggedIn;
 
 	@Builder.Default
 	@JsonIgnore
