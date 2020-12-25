@@ -3,6 +3,7 @@ package com.fajar.shoppingmart.service.transaction;
 import static com.fajar.shoppingmart.util.CollectionUtil.arrayToList;
 import static com.fajar.shoppingmart.util.CollectionUtil.convertList;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -410,5 +411,15 @@ public class ProductServiceImpl implements ProductService{
 		return productSalesList;
 	}
 	
+	public WebResponse getTotalProduct() {
+		BigInteger total = productRepository.getTotalProduct();
+		WebResponse response = new WebResponse();
+		try {
+			response.setTotalData(total.intValue());
+		} catch (Exception e) {
+			response.setMessage(e.getMessage());
+		}
+		return response;
+	}
 
 }

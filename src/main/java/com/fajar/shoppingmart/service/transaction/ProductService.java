@@ -21,5 +21,7 @@ public interface ProductService {
 
 	public List<String> getRandomProductImages(String imagebasePath);
 
+	public WebResponse getTotalProduct();
+
 	
 }

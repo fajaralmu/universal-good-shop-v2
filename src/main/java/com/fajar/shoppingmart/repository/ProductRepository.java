@@ -1,6 +1,7 @@
 package com.fajar.shoppingmart.repository;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,6 +36,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 			"left join supplier on supplier.id = transaction.supplier_id " + 
 			"where transaction.supplier_id = ?1 group by product.id")
 	public List<Product> getProductsSuppliedBySupplier(long supplierId);
+
+	@Query(nativeQuery = true, value = "select count(*) from product")
+	public BigInteger getTotalProduct();
 	
 	
 

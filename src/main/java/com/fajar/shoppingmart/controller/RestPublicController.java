@@ -30,9 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RestPublicController extends BaseController {
 
 	@Autowired
-	private ProductService productService;
-//	@Autowired
-//	private FlatFileAccessor flatFileAccessor;
+	private ProductService productService; 
 
 	@PostConstruct
 	public void init() {
@@ -74,8 +72,15 @@ public class RestPublicController extends BaseController {
 	@PostMapping(value = "/requestid", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public WebResponse getRequestId(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException {
 		
-		log.info("generate or update requestId {}");
+		log.info("generate or update requestId }");
 		WebResponse response = userSessionService.generateRequestId(httpRequest, httpResponse);
+		return response;
+	}
+	@PostMapping(value = "/totalproduct", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public WebResponse totalproduct(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException {
+		
+		log.info("get totalproduct ");
+		WebResponse response = productService.getTotalProduct();
 		return response;
 	}
 
