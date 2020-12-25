@@ -23,6 +23,7 @@ import com.fajar.shoppingmart.service.LogProxyFactory;
 import com.fajar.shoppingmart.service.transaction.ProductService;
 import com.fajar.shoppingmart.service.transaction.SellingAndPurchasingService;
 import com.fajar.shoppingmart.service.transaction.TransactionHistoryService;
+import com.fajar.shoppingmart.util.SessionUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -62,7 +63,7 @@ public class RestTransactionController extends BaseController{
 	@CustomRequestInfo(withRealtimeProgress = true)
 	public WebResponse sell(@RequestBody WebRequest request, HttpServletRequest httpRequest,
 			HttpServletResponse httpResponse) throws IOException {
-		log.info("purchase {}", request);
+		log.info("selling, requestId {}", SessionUtil.getPageRequestId(httpRequest));
 		 
 		WebResponse response = transactionService.sellProduct(request, httpRequest);
 		return response;

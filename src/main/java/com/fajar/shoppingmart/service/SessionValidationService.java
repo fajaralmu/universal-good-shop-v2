@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.fajar.shoppingmart.config.security.UserDetailDomain;
 import com.fajar.shoppingmart.entity.User;
+import com.fajar.shoppingmart.util.SessionUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,7 +34,9 @@ public class SessionValidationService {
 		if (validatePrinciple(request.getUserPrincipal()) == false) {
 			return null;
 		}
-		return ((UserDetailDomain) getUserPrincipal(request)).getUserDetails();
+		User user = ((UserDetailDomain) getUserPrincipal(request)).getUserDetails();
+		user.setRequestId(SessionUtil.getPageRequestId(request));
+		return user;
 	}
 	public Object getUserPrincipal(HttpServletRequest request) {
 		boolean validated = validatePrinciple(request.getUserPrincipal());
