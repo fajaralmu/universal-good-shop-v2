@@ -81,7 +81,7 @@ public class TransactionHistoryServiceImpl implements TransactionHistoryService 
 			cashflow.setModule(request.getFilter().getModule());
 			response.setEntity(cashflow);
 		}
-		response.setTransactionYears(new int[] { getMinTransactionYear(), Calendar.getInstance().get(Calendar.YEAR) });
+		response.setTransactionYears(new Integer[] { getMinTransactionYear(), Calendar.getInstance().get(Calendar.YEAR) });
 		return response;
 	}
 	
@@ -138,8 +138,20 @@ public class TransactionHistoryServiceImpl implements TransactionHistoryService 
 		response.setPurchasings(purchasings);
 		response.setSellings(sellings);
 		response.setFilter(request.getFilter());
+		response.setTransactionYears(transactionYears());
 		return response;
 	}
+	private Integer[] transactionYears() {
+		int year = DateUtil.getCalendarYear(new Date());
+		int minYear = getMinTransactionYear();
+		List<Integer> years = new ArrayList<>();
+		for (int i = year; i <= year; i++) {
+			years.add(i);
+		}
+		 
+		return years.toArray(new Integer[] {} );
+	}
+
 	@Override
 	public WebResponse getCashflowMonthly(WebRequest request, String requestId) {
 		WebResponse response = new WebResponse();
@@ -166,7 +178,7 @@ public class TransactionHistoryServiceImpl implements TransactionHistoryService 
 			progressService.sendProgress(1, 1, 20, requestId);
 			
 			response.setFilter(filter);
-			response.setTransactionYears(new int[] { getMinTransactionYear(), Calendar.getInstance().get(Calendar.YEAR) });
+			response.setTransactionYears(new Integer[] { getMinTransactionYear(), Calendar.getInstance().get(Calendar.YEAR) });
 			
 		} catch (Exception e) {
 			e.printStackTrace();

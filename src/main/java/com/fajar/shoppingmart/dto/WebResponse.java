@@ -65,7 +65,7 @@ public class WebResponse implements Serializable {
 	private ApplicationProfile applicationProfile;
 
 	private double percentage;
-	private int[] transactionYears;
+	private Integer[] transactionYears;
 	 
 	private String requestId; 
 	private String token;
