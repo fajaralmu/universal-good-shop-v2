@@ -145,7 +145,7 @@ public class TransactionHistoryServiceImpl implements TransactionHistoryService 
 		int year = DateUtil.getCalendarYear(new Date());
 		int minYear = getMinTransactionYear();
 		List<Integer> years = new ArrayList<>();
-		for (int i = year; i <= year; i++) {
+		for (int i = minYear; i <= year; i++) {
 			years.add(i);
 		}
 		 
