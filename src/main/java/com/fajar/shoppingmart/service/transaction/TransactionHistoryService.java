@@ -25,6 +25,8 @@ public interface TransactionHistoryService {
 	public Transaction getFirstTransaction(Long id);
 
 	public int getMinTransactionYear();
+	
+	public Integer[] getTransactionYears();
 
 	public WebResponse getTransactionData(String transactionCode);
 

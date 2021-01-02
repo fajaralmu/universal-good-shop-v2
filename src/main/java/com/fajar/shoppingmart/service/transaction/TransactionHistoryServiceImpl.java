@@ -81,7 +81,8 @@ public class TransactionHistoryServiceImpl implements TransactionHistoryService 
 			cashflow.setModule(request.getFilter().getModule());
 			response.setEntity(cashflow);
 		}
-		response.setTransactionYears(new Integer[] { getMinTransactionYear(), Calendar.getInstance().get(Calendar.YEAR) });
+//		response.setTransactionYears(new Integer[] { getMinTransactionYear(), Calendar.getInstance().get(Calendar.YEAR) });
+		response.setTransactionYears(getTransactionYears());
 		return response;
 	}
 	
@@ -138,10 +139,11 @@ public class TransactionHistoryServiceImpl implements TransactionHistoryService 
 		response.setPurchasings(purchasings);
 		response.setSellings(sellings);
 		response.setFilter(request.getFilter());
-		response.setTransactionYears(transactionYears());
+		response.setTransactionYears(getTransactionYears());
 		return response;
 	}
-	private Integer[] transactionYears() {
+	@Override
+	public Integer[] getTransactionYears() {
 		int year = DateUtil.getCalendarYear(new Date());
 		int minYear = getMinTransactionYear();
 		List<Integer> years = new ArrayList<>();

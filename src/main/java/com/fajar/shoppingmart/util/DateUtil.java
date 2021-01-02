@@ -15,7 +15,12 @@ import com.fajar.shoppingmart.dto.KeyValue;
 public class DateUtil {
 
 	static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat();
-
+	
+	public static void main(String[] args) {
+		double x = 9000.12;
+		System.out.println("res: "+ (x < 5000));
+	}
+	
 	static final Calendar cal() {
 		return Calendar.getInstance();
 	}

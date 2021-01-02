@@ -137,6 +137,8 @@ public class ProductServiceImpl implements ProductService{
 		WebResponse response = new WebResponse();
 		response.setEntities(convertList(productSalesList));
 		response.setFilter(request.getFilter());
+		response.setTotalData(productRepository.getTotalProduct().intValue());
+		response.setTransactionYears(transactionHistoryService.getTransactionYears());
 		return response;
 	}
 	
@@ -198,8 +200,6 @@ public class ProductServiceImpl implements ProductService{
 		progressService.sendComplete(requestId);
 		return response;
 	}
-
-	
  
 	@Override
 	public List<String> getRandomProductImages(String imagebasePath) {
