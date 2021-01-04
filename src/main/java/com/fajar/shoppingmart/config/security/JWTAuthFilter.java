@@ -44,7 +44,8 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				log.info("JWT Authenticated..");
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-				
+				String refreshToken = jwtUtils.generateJwtToken(authentication);
+				response.setHeader("refresh_token", refreshToken);
 				
 			} else {
 //				log.info("jwt is null");
