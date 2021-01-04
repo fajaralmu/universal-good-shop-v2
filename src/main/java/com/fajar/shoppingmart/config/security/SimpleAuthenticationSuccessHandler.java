@@ -71,6 +71,7 @@ public class SimpleAuthenticationSuccessHandler implements AuthenticationSuccess
 			String jwt = jwtUtils.generateJwtToken(authentication);
 			response.setHeader("access-token", jwt);
 			response.setHeader("Access-Control-Allow-Origin", "*");
+			response.setHeader("Access-Control-Expose-Headers", "access-token");
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 			UserDetailDomain principal = (UserDetailDomain) authentication.getPrincipal();
 			User user = principal.getUserDetails();
