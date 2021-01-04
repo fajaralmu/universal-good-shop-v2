@@ -69,7 +69,7 @@ public class SimpleAuthenticationSuccessHandler implements AuthenticationSuccess
 		log.info(":::::::::: sendJsonResponse ::::::::::::");
 		try {
 			String jwt = jwtUtils.generateJwtToken(authentication);
-			response.setHeader("api_token", jwt);
+			response.setHeader("access-token", jwt);
 			response.setHeader("Access-Control-Allow-Origin", "*");
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 			UserDetailDomain principal = (UserDetailDomain) authentication.getPrincipal();
