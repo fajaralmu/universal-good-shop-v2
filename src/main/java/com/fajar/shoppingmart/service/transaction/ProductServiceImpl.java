@@ -196,7 +196,8 @@ public class ProductServiceImpl implements ProductService{
 		response.setEntity(product);
 		response.setMaxValue(maxValue.longValue());
 		response.setEntities(convertList(salesList));
-
+		response.setTransactionYears(transactionHistoryService.getTransactionYears());
+		
 		progressService.sendComplete(requestId);
 		return response;
 	}
