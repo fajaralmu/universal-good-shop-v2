@@ -32,60 +32,57 @@ public class CriteriaBuilder {
 	private final Session hibernateSession;
 
 	private int joinIndex = 1;
-	private final boolean allItemExactSearch;  
-	
+	private final boolean allItemExactSearch;
+
 	private final Class<? extends BaseEntity> entityClass;
-	private final Filter filter; 
+	private final Filter filter;
 	private final Criteria criteria;
 	private final Map<String, Object> fieldsFilter;
 	private final Map<String, Integer> aliases = new HashMap<>();
 	private final List<Field> entityDeclaredFields;
 
-	
 	private static final String THIS = "this";
 
 	public CriteriaBuilder(Session hibernateSession, Class<? extends BaseEntity> _class, Filter filter) {
 		this.hibernateSession = hibernateSession;
 		this.entityClass = _class;
 		this.filter = SerializationUtils.clone(filter);
-		this.allItemExactSearch = filter.isExacts(); 
-		this.criteria = this.hibernateSession.createCriteria(entityClass, entityClass.getSimpleName()); 
+		this.allItemExactSearch = filter.isExacts();
+		this.criteria = this.hibernateSession.createCriteria(entityClass, entityClass.getSimpleName());
 		this.fieldsFilter = filter.getFieldsFilter();
 		this.entityDeclaredFields = EntityUtil.getDeclaredFields(entityClass);
-		
+
 		this.setJoinColumnAliases();
 		log.info("=======CriteriaBuilder Field Filters: {}", fieldsFilter);
 	}
 
-	private Criterion restrictionEquals(Class<?> entityClass, String fieldName, Object fieldValue) {
+	private Criterion restrictionEquals(Class<?> entityClass, String keyName, Object fieldValue) {
 		String entityName = entityClass.getSimpleName();
 		String columnName;
-		boolean multiKey = fieldName.contains(",");
+		boolean multiKey = keyName.contains(",");
 		Field field;
 
 		if (multiKey) {
-			Field hisField = EntityUtil.getDeclaredField(entityClass, fieldName.split(",")[0]);
-			field = EntityUtil.getDeclaredField(hisField.getType(), fieldName.split(",")[1]);
-			String alias = getAlias(hisField.getName()) + "." + QueryUtil.getColumnName(field);
+			Field foreignField = EntityUtil.getDeclaredField(entityClass, keyName.split(",")[0]);
+			field = EntityUtil.getDeclaredField(foreignField.getType(), keyName.split(",")[1]);
+			String alias = getAlias(foreignField.getName()) + "." + QueryUtil.getColumnName(field);
 			return Restrictions.sqlRestriction(alias + "='" + fieldValue + "'");
 		} else {
-			Field hisField = EntityUtil.getDeclaredField(entityClass, fieldName);
-
-			KeyValue joinColumnResult = QueryUtil.checkIfJoinColumn(fieldName, hisField, true);
-			field = EntityUtil.getDeclaredField(entityClass, fieldName);
-
+			field = EntityUtil.getDeclaredField(entityClass, keyName);
+			KeyValue joinColumnResult = QueryUtil.checkIfJoinColumn(keyName, field, true);
+			
 			if (null != joinColumnResult) {
 				// process join column
-				FormField formField = hisField.getAnnotation(FormField.class);
-				fieldName = getAlias(fieldName) + "." + formField.optionItemName();
-				return Restrictions.sqlRestriction(fieldName + "='" + fieldValue + "'");
+				FormField formField = field.getAnnotation(FormField.class);
+				keyName = getAlias(keyName) + "." + formField.optionItemName();
+				return Restrictions.sqlRestriction(keyName + "='" + fieldValue + "'");
 			}
 
-			columnName = entityName + '.' + fieldName;
+			columnName = entityName + '.' + keyName;
 		}
 
 		if (field.getType().equals(String.class) == false) {
-			return nonStringEqualsExp(fieldName, fieldValue);
+			return nonStringEqualsExp(keyName, fieldValue);
 		}
 
 		Object validatedValue = validateFieldValue(field, fieldValue);
@@ -156,22 +153,22 @@ public class CriteriaBuilder {
 		}
 
 	}
-	
+
 	public Criteria createRowCountCriteria() {
 
 		Criteria criteria = createCriteria(true);
 		criteria.setProjection(Projections.rowCount());
 		return criteria;
 	}
-	
+
 	public Criteria createCriteria() {
 		return createCriteria(false);
 	}
- 
-	private Criteria createCriteria(boolean onlyRowCount) { 
-	
+
+	private Criteria createCriteria(boolean onlyRowCount) {
+
 		String entityName = entityClass.getSimpleName();
-		
+
 		setCurrentAlias(THIS);
 
 		for (final String rawKey : fieldsFilter.keySet()) {
@@ -247,12 +244,13 @@ public class CriteriaBuilder {
 
 		}
 
-		if(onlyRowCount) {
+		if (onlyRowCount) {
 			return criteria;
 		}
-		
+
 		try {
-			addOrderOffsetLimit( filter);
+//			setCurrentAlias(THIS);
+			addOrderOffsetLimit(filter);
 		} catch (Exception e) {
 			log.error("Error adding order/offset/limit");
 			e.printStackTrace();
@@ -260,28 +258,45 @@ public class CriteriaBuilder {
 
 		return criteria;
 
-	} 
+	}
 
-	private void addOrderOffsetLimit( Filter filter) {
+	private void addOrderOffsetLimit(Filter filter) {
 		if (filter.getLimit() > 0) {
 			criteria.setMaxResults(filter.getLimit());
 			if (filter.getPage() > 0) {
 				criteria.setFirstResult(filter.getPage() * filter.getLimit());
 			}
 		}
+		String orderBy = extractOrderByKey(filter);
+		if (null != orderBy) {
 
-		if (null != filter.getOrderBy()) {
 			Order order;
-
 			if (filter.getOrderType().toLowerCase().equals("desc")) {
-				order = Order.desc(filter.getOrderBy());
+				order = Order.desc(orderBy);
 			} else {
-				order = Order.asc(filter.getOrderBy());
+				order = Order.asc(orderBy);
 			}
 
 			criteria.addOrder(order);
 		}
 
+	}
+
+	private String extractOrderByKey(Filter filter) {
+		String orderBy = filter.getOrderBy();
+		Field field = EntityUtil.getDeclaredField(entityClass, orderBy);
+		if (null == field) {
+			log.info("{} is not {} field", orderBy, entityClass);
+			return null;
+		}
+		if (field.getAnnotation(JoinColumn.class) != null) {
+			FormField formField = field.getAnnotation(FormField.class);
+			String foreginFieldName = formField.optionItemName();
+			Field foreignField = EntityUtil.getDeclaredField(field.getType(), foreginFieldName);
+//			return getAlias(orderBy) + "." +QueryUtil.getColumnName(foreignField);
+			return orderBy+"."+foreginFieldName;
+		}
+		return orderBy;
 	}
 
 	private Criterion restrictionLike(final String fieldName, Class<?> _class, Object value) {
