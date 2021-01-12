@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.fajar.shoppingmart.dto.WebRequest;
 import com.fajar.shoppingmart.dto.WebResponse;
 import com.fajar.shoppingmart.entity.User;
+import com.fajar.shoppingmart.repository.EntityRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +24,8 @@ public class UserService {
 	private BCryptPasswordEncoder passwordEncoder;
 	@Autowired
 	private FileService fileService;
+	@Autowired
+	private EntityRepository entityRepository;
 
 	public WebResponse updateProfile(HttpServletRequest httpServletRequest, WebRequest webRequest) {
 		log.info("Update profile");
@@ -54,7 +57,7 @@ public class UserService {
 				e.printStackTrace();
 			}
 		}
-		
+		entityRepository.save(loggedUser);
 	}
 
 }
