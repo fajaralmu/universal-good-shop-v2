@@ -2,7 +2,6 @@ package com.fajar.shoppingmart.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Base64;
@@ -14,6 +13,9 @@ import org.apache.commons.net.ftp.FTPReply;
 
 import com.fajar.shoppingmart.util.ThreadUtil;
 
+import lombok.Data;
+
+@Data
 class FtpClient {
 
 	final private String server;
@@ -21,6 +23,7 @@ class FtpClient {
 	final private String user;
 	final private String password;
 	private FTPClient ftp;
+	private String baseDirectory = "upload/";
 
 	// constructor
 	public FtpClient(String server, int port, String user, String password) {
@@ -48,17 +51,20 @@ class FtpClient {
 	public void close() throws IOException {
 		ftp.disconnect();
 	}
+
 	public ByteArrayOutputStream getUploadedImage(String name) throws IOException {
-	    ByteArrayOutputStream out = new ByteArrayOutputStream();
-	    ftp.retrieveFile("upload/"+name, out);
-	    return out;
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ftp.retrieveFile(baseDirectory + name, out);
+		return out;
 	}
+
 	public void storeBase64Image(String base64image, String fileName) throws Exception {
 		ByteArrayInputStream image = base64ToBufferedImage(base64image);
 		ftp.setFileType(FTP.BINARY_FILE_TYPE);
-		ftp.storeFile("upload/" + fileName, image);
+		ftp.storeFile(baseDirectory + fileName, image);
 		completePendingCommand();
 	}
+
 	void completePendingCommand() {
 		ThreadUtil.run(() -> {
 			try {
@@ -66,11 +72,10 @@ class FtpClient {
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
-				
+
 			}
 		});
 	}
-
 
 	private ByteArrayInputStream base64ToBufferedImage(String imageString) throws Exception {
 
