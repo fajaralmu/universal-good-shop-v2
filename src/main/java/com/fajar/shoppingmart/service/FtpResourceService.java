@@ -3,6 +3,7 @@ package com.fajar.shoppingmart.service;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
@@ -27,12 +28,22 @@ public class FtpResourceService {
 	private String ftpBaseDirectory;
 
 	public BufferedImage getImage(String name) throws Exception {
-		
+		 
+		ByteArrayOutputStream output = getImageAsOutputStream(name);
+		return ImageIO.read(toInputStream(output));
+	}
+	public ByteArrayOutputStream getImageAsOutputStream(String name) throws Exception {
 		FtpClient ftpClient = ftpClientInstance();
 		ftpClient.open();
 		ByteArrayOutputStream output = ftpClient.getUploadedImage(name);
+		ftpClient.completePendingCommand();
+		ftpClient.close();
+		return output;
+	}
+	public ByteArrayInputStream getImageAsInputStream(String name) throws Exception {
 		
-		return ImageIO.read(toInputStream(output));
+		ByteArrayOutputStream output = getImageAsOutputStream(name);
+		return new ByteArrayInputStream(output.toByteArray());
 	}
 
 	private ByteArrayInputStream toInputStream(ByteArrayOutputStream output) {

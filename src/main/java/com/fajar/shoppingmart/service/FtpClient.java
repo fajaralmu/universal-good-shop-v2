@@ -53,6 +53,7 @@ class FtpClient {
 	}
 
 	public ByteArrayOutputStream getUploadedImage(String name) throws IOException {
+		ftp.setFileType(FTP.BINARY_FILE_TYPE);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		ftp.retrieveFile(baseDirectory + name, out);
 		return out;
