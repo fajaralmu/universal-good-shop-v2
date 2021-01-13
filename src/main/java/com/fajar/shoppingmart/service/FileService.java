@@ -51,9 +51,7 @@ public class FileService {
 		image = ImageIO.read(bis);
 		bis.close();
 
-		String path = webAppConfiguration.getUploadedImageRealPath();
-
-		String iconName = IconWriter.writeIcon(image, path + "/ICON");
+		String iconName = IconWriter.writeIcon(image, getPath() + "/ICON");
 
 		return iconName;
 
@@ -80,16 +78,32 @@ public class FileService {
 		String imageIdentity = imageData[0];
 		String imageType = imageIdentity.replace("data:image/", "").replace(";base64", "");
 		String randomId = String.valueOf(new Date().getTime()) + StringUtil.generateRandomNumber(5) +"_"+getCounter();
-		String path = webAppConfiguration.getUploadedImageRealPath();
-
+		
 		String imageFileName = code + "_" + randomId + "." + imageType;
-		File outputfile = new File(path + "/" + imageFileName);
-		System.out.println("==========UPLOADED FILE: " + outputfile.getAbsolutePath());
+		File outputfile = new File(getPath() + "/" + imageFileName);
 		ImageIO.write(image, imageType, outputfile);
+		
 		System.out.println("==output file: " + outputfile.getAbsolutePath());
 		
 		addCounter();
+		storeFtp(imageString, imageFileName);
+		
 		return imageFileName;
+	}
+	
+	private String getPath() {
+		return webAppConfiguration.getUploadedImageRealPath();
+	}
+	
+	private void storeFtp(String imageString, String imageFileName)  {
+		try {
+			FtpClient ftpClient = new FtpClient();
+			ftpClient.open();
+			ftpClient.storeBase64Image(imageString, imageFileName);
+			ftpClient.logout();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
