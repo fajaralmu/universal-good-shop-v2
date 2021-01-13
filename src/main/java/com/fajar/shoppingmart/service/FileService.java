@@ -100,7 +100,7 @@ public class FileService {
 			FtpClient ftpClient = new FtpClient();
 			ftpClient.open();
 			ftpClient.storeBase64Image(imageString, imageFileName);
-			ftpClient.logout();
+			ftpClient.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

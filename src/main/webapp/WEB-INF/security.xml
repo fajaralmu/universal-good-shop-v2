@@ -8,6 +8,7 @@
           http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
  
 	<http pattern="/res/**" security="none" />
+	<http pattern="/assets/**" security="none" />
 	
 	<beans:bean id="userDetailsService" class="com.fajar.shoppingmart.config.security.UserDetailServiceImpl"/>
  	<beans:bean id="jwtAuthFilter" class="com.fajar.shoppingmart.config.security.JWTAuthFilter">
