@@ -16,16 +16,18 @@ import com.fajar.shoppingmart.util.ThreadUtil;
 
 class FtpClient {
 
-	private String server;
-	private int port;
-	private String user = "anonymous";
-	private String password = "";
+	final private String server;
+	final private int port;
+	final private String user;
+	final private String password;
 	private FTPClient ftp;
 
 	// constructor
-	public FtpClient() {
-		server = "localhost";
-		port = 21;
+	public FtpClient(String server, int port, String user, String password) {
+		this.server = server;
+		this.port = port;
+		this.user = user;
+		this.password = password;
 
 	}
 
