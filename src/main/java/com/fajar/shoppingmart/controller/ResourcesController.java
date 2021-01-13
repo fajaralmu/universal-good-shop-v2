@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.fajar.shoppingmart.service.ResourceService;
+import com.fajar.shoppingmart.service.FtpResourceService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,11 +21,11 @@ import lombok.extern.slf4j.Slf4j;
 public class ResourcesController extends BaseController{
 	
 	@Autowired
-	private ResourceService resourceService;
+	private FtpResourceService resourceService;
 
 	@RequestMapping(value = { "/images/{name:.+}"}) 
 	public void images(@PathVariable(name="name") String name, HttpServletRequest request, HttpServletResponse response) throws Exception  { 
-		log.info("get image name: {}", name);
+		 
 		BufferedImage image = resourceService.getImage(name);
 		String[] nameSplitted = name.split("\\.");
 		String type = nameSplitted[nameSplitted.length-1];

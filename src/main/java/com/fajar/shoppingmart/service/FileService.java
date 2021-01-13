@@ -6,11 +6,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fajar.shoppingmart.service.config.WebConfigService;
@@ -22,11 +22,18 @@ public class FileService {
 
 	@Autowired
 	private WebConfigService webAppConfiguration;
+	@Autowired
+	private FtpResourceService ftpResourceService;
+	@Value("${app.resources.ftpUpload}")
+	private boolean ftpUpload;
+
 	int counter = 0;
+
 	public int getCounter() {
 		return counter;
 	}
-	private void addCounter(){
+
+	private void addCounter() {
 		counter++;
 	}
 
@@ -52,12 +59,42 @@ public class FileService {
 		bis.close();
 
 		String iconName = IconWriter.writeIcon(image, getPath() + "/ICON");
-
+//		storeFtp(imageString, imageFileName)
 		return iconName;
 
 	}
 
 	public synchronized String writeImage(String code, String data) throws IOException {
+		if (ftpUpload) {
+			return writeImageFtp(code, data);
+		}
+
+		return writeImageToDisk(code, data);
+	}
+
+	public synchronized String writeImageFtp(String code, String data) throws IOException {
+
+		String[] imageData = data.split(",");
+		if (imageData == null || imageData.length < 2) {
+			return null;
+		}
+		// create a buffered image
+		String imageString = imageData[1];
+
+		// extract image name
+		String imageIdentity = imageData[0];
+		String imageType = imageIdentity.replace("data:image/", "").replace(";base64", "");
+		String randomId = String.valueOf(new Date().getTime()) + StringUtil.generateRandomNumber(5) + "_"
+				+ getCounter();
+
+		String imageFileName = code + "_" + randomId + "." + imageType;
+		addCounter();
+		ftpResourceService.storeFtp(imageString, imageFileName);
+
+		return imageFileName;
+	}
+
+	public synchronized String writeImageToDisk(String code, String data) throws IOException {
 
 		String[] imageData = data.split(",");
 		if (imageData == null || imageData.length < 2) {
@@ -77,33 +114,22 @@ public class FileService {
 		// write the image to a file
 		String imageIdentity = imageData[0];
 		String imageType = imageIdentity.replace("data:image/", "").replace(";base64", "");
-		String randomId = String.valueOf(new Date().getTime()) + StringUtil.generateRandomNumber(5) +"_"+getCounter();
-		
+		String randomId = String.valueOf(new Date().getTime()) + StringUtil.generateRandomNumber(5) + "_"
+				+ getCounter();
+
 		String imageFileName = code + "_" + randomId + "." + imageType;
 		File outputfile = new File(getPath() + "/" + imageFileName);
 		ImageIO.write(image, imageType, outputfile);
-		
+
 		System.out.println("==output file: " + outputfile.getAbsolutePath());
-		
+
 		addCounter();
-		storeFtp(imageString, imageFileName);
-		
+
 		return imageFileName;
 	}
-	
+
 	private String getPath() {
 		return webAppConfiguration.getUploadedImageRealPath();
-	}
-	
-	private void storeFtp(String imageString, String imageFileName)  {
-		try {
-			FtpClient ftpClient = new FtpClient();
-			ftpClient.open();
-			ftpClient.storeBase64Image(imageString, imageFileName);
-			ftpClient.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 }
