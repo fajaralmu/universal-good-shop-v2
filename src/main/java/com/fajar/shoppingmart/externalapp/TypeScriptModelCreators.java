@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,21 +12,20 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-import com.fajar.shoppingmart.util.CollectionUtil;
 import com.fajar.shoppingmart.util.EntityUtil;
 public class TypeScriptModelCreators {
 	final static String inputDir = "D:\\Development\\Eclipse\\universal-good-shop-v2\\src\\"
 			+ "main\\java\\com\\fajar\\shoppingmart\\entity\\setting\\";
 	final static String outputDir = "D:\\Development\\Front End\\universalshop\\good-shop-v2\\src\\models\\";
 	public static void main(String[] args) {
-		List<String> names = getJavaFiles();
+		List<String> names = getJavaFiles(inputDir);
 		List<Class> classes = getJavaClasses("com.fajar.shoppingmart.entity.setting", names);
 		for (Class class1 : classes) {
 			String content = printClass(class1);
 			writeFile(outputDir+class1.getSimpleName()+".ts", content);
 		}
 	}
-	private static List<Class> getJavaClasses(String packageName, List<String> fileNames) {
+	public static List<Class> getJavaClasses(String packageName, List<String> fileNames) {
 		
 		List<Class> classes = new ArrayList<>();
 		for (String name : fileNames) {
@@ -43,7 +41,7 @@ public class TypeScriptModelCreators {
 		return classes ;
 	}
 
-	private static void writeFile(String fileName, String content) {
+	public static void writeFile(String fileName, String content) {
 		try {
 			FileUtils.writeStringToFile(new File(fileName), content);
 		} catch (IOException e) {
@@ -51,7 +49,7 @@ public class TypeScriptModelCreators {
 			e.printStackTrace();
 		}
 	}
-	private static List<String> getJavaFiles() {
+	public static List<String> getJavaFiles(String inputDir) {
 		File file = new File(inputDir );
 		File[] listFiles = file.listFiles();
 
@@ -61,7 +59,7 @@ public class TypeScriptModelCreators {
 			if (fileName.endsWith(".java") == false) {
 				continue;
 			}
-			System.out.println(file2.getName());
+//			System.out.println(file2.getName());
 			fileNames.add(fileName.replace(".java", ""));
 		}
 		

@@ -55,7 +55,7 @@ public class Product extends BaseEntity {
 	@FormField
 	private String type;
 	
-	@Column(name = "image_url", unique = true)
+	@Column(name = "image_url" )
 	@FormField(type = FieldType.FIELD_TYPE_IMAGE, required = false, multipleImage = true, defaultValue = "Default.BMP")
 	private String imageUrl; // type:BLOB
 	

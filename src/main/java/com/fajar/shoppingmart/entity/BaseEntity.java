@@ -37,7 +37,7 @@ public class BaseEntity implements Serializable{
 	private static final long serialVersionUID = 5713292970611528372L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@FormField
 	@Type(type = "org.hibernate.type.LongType")
 	@Column 
@@ -50,13 +50,10 @@ public class BaseEntity implements Serializable{
 	private Date createdDate;
 	@Column(name = "modified_date")
 	@JsonIgnore
-	private Date modifiedDate;
-	@Column(name = "deleted_date")
-	@JsonIgnore
-	private Date deletedDate;
+	private Date modifiedDate; 
 	@Column(name = "deleted")
 	@JsonIgnore
-	private boolean deleted;
+	private Date deleted;
 	@javax.persistence.Transient
 	private List<String> nulledFields = new ArrayList<>();
 	
@@ -84,18 +81,13 @@ public class BaseEntity implements Serializable{
 		this.modifiedDate = modifiedDate;
 	}
 
-	 public boolean isDeleted() {
+	 public Date isDeleted() {
 		return deleted;
 	}
-	 public void setDeleted(boolean deleted) {
+	 public void setDeleted(Date deleted) {
 		this.deleted = deleted;
 	}
-	 public Date getDeletedDate() {
-		return deletedDate;
-	}
-	 public void setDeletedDate(Date deletedDate) {
-		this.deletedDate = deletedDate;
-	}
+	 
 	public Long getId() {
 		return id;
 	}
@@ -112,6 +104,7 @@ public class BaseEntity implements Serializable{
 		this.modifiedDate = new Date();
 	}
  
+	public void validateUniqueKeys(List<BaseEntity> entities) {}
 	
 	@JsonIgnore
 	@Transient

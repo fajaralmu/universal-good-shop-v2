@@ -7,11 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fajar.shoppingmart.annotation.Dto;
 import com.fajar.shoppingmart.annotation.FormField;
 import com.fajar.shoppingmart.dto.FieldType;
 import com.fajar.shoppingmart.dto.FontAwesomeIcon;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -77,6 +79,9 @@ public class ApplicationProfile extends BaseEntity {
 	@Column(name = "font_color")
 	private String fontColor;
 	
+	@JsonIgnore
+	@Transient
+	private String FooterIconClassValue;
 	public String getFooterIconClassValue() {
 		if(null == footerIconClass) {
 			return "fa fa-home"; 

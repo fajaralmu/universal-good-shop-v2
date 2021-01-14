@@ -14,6 +14,7 @@ import com.fajar.shoppingmart.annotation.FormField;
 import com.fajar.shoppingmart.dto.FieldType;
 import com.fajar.shoppingmart.dto.FontAwesomeIcon;
 import com.fajar.shoppingmart.dto.FormInputColumn;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -67,6 +68,10 @@ public class Page extends BaseEntity implements Sequenced  {/**
 		
 		return nonMenuPage == 0 ? "true":"false"; 
 	}
+	
+	@Transient
+	@JsonIgnore
+	private String iconClass;
 	
 	public String getIconClass() {
 		if(null == this.menuHtmlIconClass) {
