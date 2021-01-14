@@ -61,6 +61,7 @@ public class EntityRepository {
 			EntityUpdateInterceptor<?> updateInterceptor) {
 		String key = _class.getSimpleName().toLowerCase();
 		entityConfiguration.put(key, config(key, _class, updateService, updateInterceptor));
+		log.info("put entity config, key: {} - class: {}", key, _class);
 	}
 
 	@PostConstruct
@@ -72,6 +73,7 @@ public class EntityRepository {
 		entityConfiguration.clear();
 
 		List<Type> persistenceClasses = webConfigService.getEntityClassess();
+		log.info(">>>> persistenceClasses count: {}", persistenceClasses.size());
 		for (Type type : persistenceClasses) {
 			try {
 				Class<? extends BaseEntity> entityClass = (Class<? extends BaseEntity>) type;

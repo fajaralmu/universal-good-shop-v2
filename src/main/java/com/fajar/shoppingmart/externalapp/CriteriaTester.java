@@ -1,4 +1,4 @@
-package com.fajar.shoppingmart.querybuilder;
+package com.fajar.shoppingmart.externalapp;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +18,8 @@ import org.hibernate.Transaction;
 import com.fajar.shoppingmart.dto.WebRequest;
 import com.fajar.shoppingmart.entity.BaseEntity;
 import com.fajar.shoppingmart.entity.Product;
-import com.fajar.shoppingmart.externalapp.TypeScriptModelCreators;
+import com.fajar.shoppingmart.entity.Unit;
+import com.fajar.shoppingmart.querybuilder.CriteriaBuilder;
 import com.fajar.shoppingmart.util.EntityUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -97,11 +98,11 @@ public class CriteriaTester {
 //		for (Class _class : managedEntities) {
 //			printRecords(_class);
 //		}
-		try {
-			insertRecords();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			insertRecords();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		System.exit(0);
 	}
 
