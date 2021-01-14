@@ -17,7 +17,10 @@ import org.hibernate.Transaction;
 
 import com.fajar.shoppingmart.dto.WebRequest;
 import com.fajar.shoppingmart.entity.BaseEntity;
+import com.fajar.shoppingmart.entity.Category;
+import com.fajar.shoppingmart.entity.Customer;
 import com.fajar.shoppingmart.entity.Product;
+import com.fajar.shoppingmart.entity.Supplier;
 import com.fajar.shoppingmart.entity.Unit;
 import com.fajar.shoppingmart.querybuilder.CriteriaBuilder;
 import com.fajar.shoppingmart.util.EntityUtil;
@@ -94,6 +97,10 @@ public class CriteriaTester {
 
 	public static void main(String[] args) throws Exception {
 		setSession();
+		Transaction tx = testSession.beginTransaction();
+		insertRecord(Customer.class);
+		insertRecord(Supplier.class);
+		tx.commit();
 //		printEntitiesNames(); 
 //		for (Class _class : managedEntities) {
 //			printRecords(_class);
@@ -111,28 +118,34 @@ public class CriteriaTester {
 		Transaction tx = testSession.beginTransaction();
 		 
 		for (Class clazz : entities) { 
-			System.out.println(clazz);
-			String dirPath = outputDir + "//" + clazz.getSimpleName();
-			File file = new File(dirPath);
-			String[] fileNames = file.list();
-			int c = 0;
-			if (  fileNames == null) continue;
-			for (String fileName : fileNames) {
-				String fullPath = dirPath + "//" + fileName;
-				File jsonFile = new File(fullPath);
-				String content = FileUtils.readFileToString(jsonFile);
-				BaseEntity entity = (BaseEntity) mapper.readValue(content, clazz);
-				 
-				try {
-					testSession.save(entity);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				c++;
-				System.out.println(clazz+" "+c + "/" + fileNames.length);
-			}
+			insertRecord(clazz);
 		}
 		tx.commit();
+	}
+
+	private static void insertRecord(Class clazz) throws IOException{
+		 
+		System.out.println(clazz);
+		String dirPath = outputDir + "//" + clazz.getSimpleName();
+		File file = new File(dirPath);
+		String[] fileNames = file.list();
+		int c = 0;
+		if (  fileNames == null) return;
+		for (String fileName : fileNames) {
+			String fullPath = dirPath + "//" + fileName;
+			File jsonFile = new File(fullPath);
+			String content = FileUtils.readFileToString(jsonFile);
+			BaseEntity entity = (BaseEntity) mapper.readValue(content, clazz);
+			 
+			try {
+				testSession.save(entity);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if (c > 50) return;
+			c++;
+			System.out.println(clazz+" "+c + "/" + fileNames.length);
+		}
 	}
 
 	public static void printRecords(Class<?> _class) throws Exception {
@@ -194,7 +207,7 @@ public class CriteriaTester {
 		return properties;
 	}
 
-	private static Properties additionalPropertiesPostgres() {
+	private static Properties additionalPropertiesPostgresOffline() {
 
 		String dialect = "org.hibernate.dialect.PostgreSQLDialect";
 		String ddlAuto = "update";
@@ -211,6 +224,25 @@ public class CriteriaTester {
 		properties.setProperty("hibernate.connection.pool_size", "1");
 		properties.setProperty("hbm2ddl.auto", ddlAuto);
 
+		return properties;
+	}
+	private static Properties additionalPropertiesPostgres() {
+		
+		String dialect = "org.hibernate.dialect.PostgreSQLDialect";
+		String ddlAuto = "update";
+		
+		Properties properties = new Properties();
+		properties.setProperty("hibernate.dialect", dialect);
+		properties.setProperty("hibernate.connection.url", "jdbc:postgresql://ec2-54-157-12-250.compute-1.amazonaws.com:5432/d1eu0qub2adiiv");
+		properties.setProperty("hibernate.connection.username", "veqlrgwoojdelw");
+		properties.setProperty("hibernate.connection.password", "d8b34a7856fb4ed5e56d082db5a62dd3b527dd848e95ce1e6a3652001a04f7fe");
+		
+		properties.setProperty("hibernate.connection.driver_class", org.postgresql.Driver.class.getCanonicalName());
+		properties.setProperty("hibernate.current_session_context_class", "thread");
+		properties.setProperty("hibernate.show_sql", "true");
+		properties.setProperty("hibernate.connection.pool_size", "1");
+		properties.setProperty("hbm2ddl.auto", ddlAuto);
+		properties.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
 		return properties;
 	}
 }

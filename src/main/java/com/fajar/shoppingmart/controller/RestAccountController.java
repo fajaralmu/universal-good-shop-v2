@@ -21,7 +21,7 @@ import com.fajar.shoppingmart.dto.WebRequest;
 import com.fajar.shoppingmart.dto.WebResponse;
 import com.fajar.shoppingmart.entity.User;
 import com.fajar.shoppingmart.service.LogProxyFactory;
-import com.fajar.shoppingmart.service.UserService;
+import com.fajar.shoppingmart.service.config.DefaultUserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RestAccountController extends BaseController {
 
 	@Autowired
-	private UserService userService;
+	private DefaultUserService userService;
 	public RestAccountController() {
 		log.info("------------------RestAccountController-----------------");
 	}
@@ -49,6 +49,7 @@ public class RestAccountController extends BaseController {
 	}
 	@PostMapping(value = "/updateprofile", produces = MediaType.APPLICATION_JSON_VALUE)
 	public WebResponse updateProfile(@RequestBody WebRequest webRequest, HttpServletRequest httpRequest) throws IOException {
+		log.info("update profile");
 		return userService.updateProfile(httpRequest, webRequest);
 	}
 	@PostMapping(value="/logout", produces = MediaType.APPLICATION_JSON_VALUE)

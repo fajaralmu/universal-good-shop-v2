@@ -1,17 +1,24 @@
 package com.fajar.shoppingmart.service.config;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.fajar.shoppingmart.dto.WebRequest;
+import com.fajar.shoppingmart.dto.WebResponse;
 import com.fajar.shoppingmart.entity.Authority;
 import com.fajar.shoppingmart.entity.AuthorityType;
 import com.fajar.shoppingmart.entity.User;
 import com.fajar.shoppingmart.repository.AuthorityRepository;
+import com.fajar.shoppingmart.repository.EntityRepository;
 import com.fajar.shoppingmart.repository.UserRepository;
+import com.fajar.shoppingmart.service.FileService;
+import com.fajar.shoppingmart.service.SessionValidationService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +28,12 @@ public class DefaultUserService {
 	private UserRepository userRepository;  
 	@Autowired
 	private AuthorityRepository authorityRepository;
+	@Autowired
+	private SessionValidationService sessionValidationService; 
+	@Autowired
+	private FileService fileService;
+	@Autowired
+	private EntityRepository entityRepository;
 	
 	private BCryptPasswordEncoder passwordEncoder;
 	
@@ -83,5 +96,38 @@ public class DefaultUserService {
 		
 		log.info("___________userRepository.save(user)");
 		userRepository.save(user);
+	}
+	
+	public WebResponse updateProfile(HttpServletRequest httpServletRequest, WebRequest webRequest) {
+		log.info("Update profile");
+		
+		final User loggedUser = sessionValidationService.getLoggedUser(httpServletRequest);
+		final User user = webRequest.getUser();
+		updateUserData(loggedUser, user);
+		
+		WebResponse response = new WebResponse();
+		response.setUser(loggedUser);
+		return response;
+	}
+
+	private void updateUserData(User loggedUser, User user) {
+		if (user.getUsername() != null && !user.getUsername().isEmpty()) {
+			loggedUser.setUsername(user.getUsername());
+		}
+		if (user.getDisplayName() != null && !user.getDisplayName().isEmpty()) {
+			loggedUser.setDisplayName(user.getDisplayName());
+		}
+		if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+			loggedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+		}
+		if (user.getProfileImage() != null && !user.getProfileImage().isEmpty()) {
+			try {
+				String newName = fileService.writeImage(User.class.getSimpleName(), user.getProfileImage());
+				loggedUser.setProfileImage(newName);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		entityRepository.save(loggedUser);
 	}
 }
