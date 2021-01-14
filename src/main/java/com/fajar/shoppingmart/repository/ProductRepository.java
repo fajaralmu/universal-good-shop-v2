@@ -11,7 +11,10 @@ import com.fajar.shoppingmart.entity.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-	@Query(nativeQuery = true, value = "select * from product where name like %?3% limit ?1 offset ?2")
+	//postgres
+	@Query(nativeQuery = true, value = "select * from product where name ilike %?3% limit ?1 offset ?2")
+// mysql
+	//	@Query(nativeQuery = true, value = "select * from product where name like %?3% limit ?1 offset ?2")
 	public List<Product> getByLimitAndOffset(int limit, int offset, String name);
 
 	@Query(nativeQuery = true, value = "select sum(product_flow.count) as productCount  from product   "
