@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.fajar.shoppingmart.service.config.WebConfigService;
 import com.fajar.shoppingmart.util.IconWriter;
 import com.fajar.shoppingmart.util.StringUtil;
+import com.fajar.shoppingmart.util.ThreadUtil;
 
 @Service
 public class FileService {
@@ -89,8 +90,9 @@ public class FileService {
 
 		String imageFileName = code + "_" + randomId + "." + imageType;
 		addCounter();
-		ftpResourceService.storeFtp(imageString, imageFileName);
-
+		ThreadUtil.run(()-> {
+			ftpResourceService.storeFtp(imageString, imageFileName);
+		});
 		return imageFileName;
 	}
 
