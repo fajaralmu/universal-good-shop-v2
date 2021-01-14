@@ -119,14 +119,16 @@ public class ProductInventoryServiceImpl implements ProductInventoryService{
 				if (match) {
 					filter[1] = Restrictions.eq("p."+fieldName, value);
 				} else {
-					filter[1] = Restrictions.like("p."+fieldName, value);
+//					postgres
+					filter[1] = Restrictions.ilike("p."+fieldName, value);
+					//mysql
+//					filter[1] = Restrictions.like("p."+fieldName, value);
 				}
 				if (limit > 0) {
 					criteria.setMaxResults(limit);				
 				}
 				
-				criteria.add(Restrictions.and(filter ));
-//				log.info("_______SQL_HIBERNATE_BUILT: {}", repositoryCustom.getWhereQuery(criteria));
+				criteria.add(Restrictions.and(filter )); 
 				
 				return criteria.list();
 			}

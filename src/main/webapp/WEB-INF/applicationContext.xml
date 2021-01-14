@@ -47,6 +47,7 @@
 		<property name="username" value="root" />
 		<property name="password" value="" />
 	</bean> -->
+	<!-- if you use postgres, change all "Like" query statement with "ILIKE" for not activating math case  -->
 	  <bean id="dataSource_OFFLINE_postgres"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName"

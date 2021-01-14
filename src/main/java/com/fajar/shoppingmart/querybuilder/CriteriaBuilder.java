@@ -313,7 +313,7 @@ public class CriteriaBuilder {
 			return nonStringLikeExp(field, _class, validatedValue);
 		}
 
-		SimpleExpression likeExp = Restrictions.like(fieldName, String.valueOf(validatedValue), MatchMode.ANYWHERE);
+		Criterion likeExp = Restrictions.ilike(fieldName, String.valueOf(validatedValue), MatchMode.ANYWHERE);
 
 		return likeExp;
 
@@ -326,7 +326,9 @@ public class CriteriaBuilder {
 
 		boolean isJoinColumn = field.getAnnotation(JoinColumn.class) != null;
 		String alias = isJoinColumn ? getAlias(field.getName()) : getAlias(THIS);
-		Criterion sqlRestriction = Restrictions.sqlRestriction(alias + "." + columnName + " LIKE '%" + value + "%'");
+		
+		//TODO: change to Like if using mysql
+		Criterion sqlRestriction = Restrictions.sqlRestriction(alias + "." + columnName + " ILIKE '%" + value + "%'");
 
 		return sqlRestriction;
 	}
