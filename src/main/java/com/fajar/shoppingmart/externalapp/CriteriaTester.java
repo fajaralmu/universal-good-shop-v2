@@ -142,7 +142,7 @@ public class CriteriaTester {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			if (c > 50) return;
+			//if (c > 50) return;
 			c++;
 			System.out.println(clazz+" "+c + "/" + fileNames.length);
 		}

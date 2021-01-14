@@ -103,6 +103,7 @@ public class DefaultUserService {
 		
 		final User loggedUser = sessionValidationService.getLoggedUser(httpServletRequest);
 		final User user = webRequest.getUser();
+		 
 		updateUserData(loggedUser, user);
 		
 		WebResponse response = new WebResponse();
