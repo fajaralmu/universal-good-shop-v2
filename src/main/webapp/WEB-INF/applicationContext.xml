@@ -20,8 +20,7 @@
 	  <jpa:repositories base-package="com.fajar.shoppingmart.repository" 
 		/>  
 	<mvc:interceptors>
-		<bean id="handlerInterceptor"
-			class="com.fajar.shoppingmart.config.requestfilter.MyHandlerInterceptor" />
+		<bean id="handlerInterceptor" class="com.fajar.shoppingmart.config.requestfilter.MyHandlerInterceptor" />
 	</mvc:interceptors>
 	<context:component-scan
 		base-package="com.fajar.shoppingmart" />
@@ -39,7 +38,7 @@
 	</bean>
 
 	<!-- <bean id="sessionFactory" class="org.hibernate.internal.SessionFactoryImpl"/> -->
-<bean id="dataSource_OFFLINE_mysql"
+<!-- <bean id="dataSource_OFFLINE_mysql"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName"
 			value="com.mysql.jdbc.Driver" />
@@ -47,8 +46,8 @@
 			value="jdbc:mysql://localhost:3306/goodshopv2?autoReconnect=true" />
 		<property name="username" value="root" />
 		<property name="password" value="" />
-	</bean>
-	<!-- <bean id="dataSource_OFFLINE"
+	</bean> -->
+	  <bean id="dataSource_OFFLINE_postgres"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName"
 			value="org.postgresql.Driver" />
@@ -56,13 +55,13 @@
 			value="jdbc:postgresql://localhost:5432/universal_commerce" />
 		<property name="username" value="postgres" />
 		<property name="password" value="root" />
-	</bean> -->
+	</bean>  
 	 
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="packagesToScan"
 			value="com.fajar.shoppingmart*" />
-		<property name="dataSource" ref="dataSource_OFFLINE_mysql" /><!-- <property 
+		<property name="dataSource" ref="dataSource_OFFLINE_postgres" /><!-- <property 
 			name="sessionFactory" ref="sessionFactory"></property> -->
 		<property name="jpaProperties">
 			<props>
@@ -80,10 +79,8 @@
 		</property>
 	</bean>
 
-	<bean id="persistenceProvider"
-		class="org.hibernate.jpa.HibernatePersistenceProvider" />
-	<bean id="objectMapper"
-		class="com.fasterxml.jackson.databind.ObjectMapper" />
+	<bean id="persistenceProvider" 	class="org.hibernate.jpa.HibernatePersistenceProvider" />
+	<bean id="objectMapper" 		class="com.fasterxml.jackson.databind.ObjectMapper" />
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
@@ -105,8 +102,7 @@
 			value="D:/Development/Files/Web/Shop1/Reports"></property>
 		 
 	</bean>
-	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
-	</bean>
+	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 	<bean id="defaultUserService" class="com.fajar.shoppingmart.service.config.DefaultUserService" >
 		<property name="passwordEncoder" ref="passwordEncoder"></property>
 	</bean>

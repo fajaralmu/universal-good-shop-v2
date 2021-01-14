@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @Slf4j
-public class SessionFactoryConfig {
+public class HibernateSessionConfig {
 	private static SessionFactory factory;
 
 	@Autowired

@@ -37,7 +37,7 @@ public class BaseEntity implements Serializable{
 	private static final long serialVersionUID = 5713292970611528372L;
 	
 	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@FormField
 	@Type(type = "org.hibernate.type.LongType")
 	@Column 
