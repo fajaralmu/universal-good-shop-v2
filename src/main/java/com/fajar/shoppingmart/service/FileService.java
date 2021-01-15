@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -103,7 +104,7 @@ public class FileService {
 		if (imageData == null || imageData.length < 2) {
 			return null;
 		}
-		// create a buffered image
+		
 		String imageString = imageData[1];
 
 		// extract image name
@@ -116,7 +117,7 @@ public class FileService {
 		addCounter();
 		AttachmentInfo request = (AttachmentInfo.builder().name(imageFileName).data(imageString).extension(imageType).build());
 		System.out.println("Post file to :"+apiUploadEndpoint);
-		ResponseEntity<String> response = restTemplate.postForEntity(apiUploadEndpoint, new HttpEntity<AttachmentInfo>(request, headers), String.class);
+		ResponseEntity<String> response = restTemplate.exchange(apiUploadEndpoint,HttpMethod.POST, new HttpEntity<AttachmentInfo>(request, headers), String.class);
 		System.out.println("response from api upload: "+ response.getBody() );
 		return imageFileName;
 	}
