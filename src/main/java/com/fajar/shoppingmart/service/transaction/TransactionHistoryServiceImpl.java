@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.fajar.shoppingmart.annotation.CustomEntity;
@@ -249,12 +250,12 @@ public class TransactionHistoryServiceImpl implements TransactionHistoryService 
 	
 	@Override
 	public int getMinTransactionYear() {
-		Object result = transactionRepository.findTransactionYearAsc();
+		List<Object> result = transactionRepository.findTransactionYearAsc(PageRequest.of(0, 1));
 
 		if (result == null) {
 			return Calendar.getInstance().get(Calendar.YEAR);
 		}
-		int resultInt = Integer.parseInt(result.toString());
+		int resultInt = Integer.parseInt(result.get(0).toString());
 		return resultInt;
 	}
 	

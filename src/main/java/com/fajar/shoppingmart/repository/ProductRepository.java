@@ -19,14 +19,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 	@Query(nativeQuery = true, value = "select sum(product_flow.count) as productCount  from product   "
 			+ "left join product_flow on product.id = product_flow.product_id "
-			+ "left join `transaction` on transaction.id = product_flow.transaction_id  where transaction.`type` = 'SELLING' and  "
+			+ "left join transaction on transaction.id = product_flow.transaction_id  where transaction.type = 'SELLING' and  "
 			+ "month(transaction.transaction_date) = ?1 and  year(transaction.transaction_date) = ?2"
 			+ " and product.id = ?3")
 	public Object findProductSales(int month, int year, Long productId);
  
 	@Query(nativeQuery = true, value = "select sum(product_flow.count) as productCount from product_flow  "
-			+ " left join `transaction` on transaction.id = product_flow.transaction_id "
-			+ " where transaction.`type` = 'SELLING' and product_flow.product_id = ?3"
+			+ " left join transaction on transaction.id = product_flow.transaction_id "
+			+ " where transaction.type = 'SELLING' and product_flow.product_id = ?3"
 			+ " and transaction.transaction_date >= ?1 and " + " transaction.transaction_date <= ?2 ")
 	public BigDecimal findProductSalesBetween(String period1, String period2, Long productId);
 
@@ -35,7 +35,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	
 	@Query(nativeQuery = true, value="select  *  from product  " + 
 			"left join product_flow on product_flow.product_id = product.id " + 
-			"left join `transaction` on product_flow.transaction_id = transaction.id " + 
+			"left join transaction on product_flow.transaction_id = transaction.id " + 
 			"left join supplier on supplier.id = transaction.supplier_id " + 
 			"where transaction.supplier_id = ?1 group by product.id")
 	public List<Product> getProductsSuppliedBySupplier(long supplierId);

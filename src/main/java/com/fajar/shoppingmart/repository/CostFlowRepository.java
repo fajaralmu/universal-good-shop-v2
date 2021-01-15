@@ -9,7 +9,10 @@ import com.fajar.shoppingmart.entity.CostFlow;
 
 public interface CostFlowRepository extends JpaRepository<CostFlow, Long> {
 
-	@Query(nativeQuery = true, value = "select * from cost_flow where month(`date`) = ?1 and year(`date`) = ?2")
+//mysql	@Query(nativeQuery = true, value = "select * from cost_flow where month(`date`) = ?1 and year(`date`) = ?2")
+//	postgres
+	@Query(nativeQuery = true, value = "select * from cost_flow where date_part('month', date) = ?1 and date_part('year', date) = ?2")
+
 	List<CostFlow> findByPeriod(int month, int year);
 
 }

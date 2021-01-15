@@ -361,7 +361,10 @@ public class CriteriaBuilder {
 			Object value = filter.get(key);
 			String columnName = QueryUtil.getColumnName(field);
 			log.info("mode: {}. value: {}", mode, value);
-			Criterion restriction = Restrictions.sqlRestriction(mode + "(" + columnName + ")=" + value);
+//			TODO: mysql
+//			Criterion restriction = Restrictions.sqlRestriction(mode + "(" + columnName + ")=" + value);
+//			TODO: postgres
+			Criterion restriction = Restrictions.sqlRestriction("date_part('"+mode+"'" + columnName + ")=" + value);
 
 			return restriction;
 		}

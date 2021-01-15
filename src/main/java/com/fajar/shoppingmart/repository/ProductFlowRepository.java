@@ -24,45 +24,56 @@ public interface ProductFlowRepository extends JpaRepository<ProductFlow, Long> 
 
 	@Query(nativeQuery = true, value = " select sum(product_flow.count) as used from product_flow "
 			+ " left join product on product_flow.product_id = product.id "
-			+ " left join `transaction` on transaction.id = product_flow.transaction_id "
-			+ " where transaction.`type` = ?1 and product.id = ?2")
+			+ " left join  transaction  on transaction.id = product_flow.transaction_id "
+			+ " where transaction. type  = ?1 and product.id = ?2")
 	public Object findProductFlowCount(String type, Long productId);
 
-	@Query(nativeQuery = true, value = "select * from `product_flow` "
-			+ "	 LEFT JOIN `transaction` ON  `transaction`.`id` = `product_flow`.`transaction_id`   "
-			+ "	 WHERE  `transaction`.`type` = ?1 and month(`transaction`.transaction_date) = ?2  "
-			+ "	 and year(`transaction`.transaction_date) = ?3 and `transaction`.deleted = false and `product_flow`.deleted = false")
+	@Query(nativeQuery = true, value = "select * from  product_flow  "
+			+ "	 LEFT JOIN  transaction  ON   transaction . id  =  product_flow . transaction_id    "
+			+ "	 WHERE   transaction . type  = ?1 and month( transaction .transaction_date) = ?2  "
+			+ "	 and year( transaction .transaction_date) = ?3 and  transaction .deleted = false and  product_flow .deleted = false")
 	public List<ProductFlow> findByTransactionTypeAndPeriod(String type, int month, int year);
 
-	@Query(nativeQuery = true, value = "select * from `product_flow`  "
-			+ "	LEFT JOIN `transaction` ON  `transaction`.`id` = `product_flow`.`transaction_id`   "
-			+ "	WHERE  `transaction`.`type` = ?1 and day(`transaction`.transaction_date) = ?2"
-			+ " and month(`transaction`.transaction_date) = ?3 " + "	and year(`transaction`.transaction_date) = ?4 "
-			+ " and `transaction`.deleted = false and `product_flow`.deleted = false")
+	@Query(nativeQuery = true, value = "select * from  product_flow   "
+			+ "	LEFT JOIN  transaction  ON   transaction . id  =  product_flow . transaction_id    "
+			+ "	WHERE   transaction . type  = ?1 and "
+			+ " date_part('day', transaction .transaction_date) = ?2"
+			+ " and date_part('month', transaction .transaction_date) = ?3 and date_part('year', transaction .transaction_date) = ?4 "
+// mysql		+ " day( transaction .transaction_date) = ?2"
+// mysql		+ " and month( transaction .transaction_date) = ?3 and year( transaction .transaction_date) = ?4 "
+			 )
 	public List<ProductFlow> findByTransactionTypeAndPeriod(String type, int day, int month, int year);
 
-	@Query(nativeQuery = true, value = "select * from `product_flow` "
-			+ "	 LEFT JOIN `transaction` ON  `transaction`.`id` = `product_flow`.`transaction_id`   "
-			+ "	 WHERE  month(`transaction`.transaction_date) = ?1  "
-			+ "	 and year(`transaction`.transaction_date) = ?2 and `transaction`.deleted = false and `product_flow`.deleted = false")
+	@Query(nativeQuery = true, value = "select * from  product_flow  "
+			+ "	 LEFT JOIN  transaction  ON   transaction . id  =  product_flow . transaction_id    "
+			+ "	 WHERE  "
+			+ "  date_part('month', transaction .transaction_date) = ?1  "
+			+ "	 and date_part('year', transaction .transaction_date) = ?2  "
+//			+ " month( transaction .transaction_date) = ?1  "
+//			+ "	 and year( transaction .transaction_date) = ?2  "
+			)
 	public List<ProductFlow> findByTransactionPeriod(int month, int year);
 
-	@Query(nativeQuery = true, value = "select * from product_flow left join `transaction` on transaction_id = transaction.id "
-			+ "where day(product_flow.created_date) != day(`transaction`.transaction_date) "
-			+ "or month(product_flow.created_date) != month(`transaction`.transaction_date) "
-			+ "or year(product_flow.created_date) != year(`transaction`.transaction_date)")
+	@Query(nativeQuery = true, value ="select * from product_flow left join  transaction  on transaction_id = transaction.id "
+			+ "where date_part('day', product_flow.created_date) != date_part('day',  transaction .transaction_date) "
+			+ "or date_part('month', product_flow.created_date) != date_part('month',  transaction .transaction_date) "
+			+ "or date_part('year', product_flow.created_date) != date_part('year',  transaction .transaction_date)")
+// mysql	@Query(nativeQuery = true, value = "select * from product_flow left join  transaction  on transaction_id = transaction.id "
+//			+ "where day(product_flow.created_date) != day( transaction .transaction_date) "
+//			+ "or month(product_flow.created_date) != month( transaction .transaction_date) "
+//			+ "or year(product_flow.created_date) != year( transaction .transaction_date)")
 	public List<ProductFlow> FINDINCORRECTDATE(); 
 
 	public List<ProductFlow> findByTransaction_TypeAndProduct_Id(TransactionType type, long productId);
 
-	@Query(value = "select sum(count)  from product_flow left join `transaction` on transaction_id = transaction.id  "
-			+ "where transaction.`type` = ?1 and product_id = ?2 ", nativeQuery = true)
+	@Query(value = "select sum(count)  from product_flow left join  transaction  on transaction_id = transaction.id  "
+			+ "where transaction. type  = ?1 and product_id = ?2 ", nativeQuery = true)
 	public int getCount(String trxType, long productId);
 
 	
-	@Query(value = "select sum(`product_flow`.count) as count, sum(`product_flow`.count * `product_flow`.price) as price,`transaction`.`type` as module from `product_flow`  " + 
-			"  LEFT JOIN `transaction` ON  `transaction`.`id` = `product_flow`.`transaction_id` " + 
-			"  WHERE `transaction`.`type` = ?1 and month(`transaction`.transaction_date) = ?2  " + 
-			"  and year(`transaction`.transaction_date) = ?3 and `transaction`.deleted = false and `product_flow`.deleted = false "  , nativeQuery = true)
+	@Query(value = "select sum( product_flow .count) as count, sum( product_flow .count *  product_flow .price) as price, transaction . type  as module from  product_flow   " + 
+			"  LEFT JOIN  transaction  ON   transaction . id  =  product_flow . transaction_id  " + 
+			"  WHERE  transaction . type  = ?1 and date_part('month', transaction .transaction_date) = ?2  " + 
+			"  and date_part('year', transaction .transaction_date) = ?3   group by transaction.type"  , nativeQuery = true)
 	public Object findCashflowByModuleAndMonthAndYear(String transactionType, Integer month, Integer year);
 }

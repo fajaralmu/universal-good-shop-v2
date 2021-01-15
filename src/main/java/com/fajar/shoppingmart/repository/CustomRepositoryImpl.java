@@ -22,7 +22,10 @@ public class CustomRepositoryImpl {
 	public static <O> O fillObject(Class<O> objectClass, Object[] propertiesArray, String[] propertyOrder)
 			throws Exception {
 		O object = objectClass.getDeclaredConstructor().newInstance();
-
+		if (null == propertiesArray) 
+		{
+			return object;
+		}
 		for (int j = 0; j < propertiesArray.length; j++) {
 			String propertyName = propertyOrder[j];
 			Object propertyValue = propertiesArray[j];
