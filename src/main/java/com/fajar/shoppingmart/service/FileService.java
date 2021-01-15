@@ -9,6 +9,7 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
@@ -122,7 +123,7 @@ public class FileService {
 		addCounter();
 		AttachmentInfo request = (AttachmentInfo.builder().name(imageFileName).data(imageString).extension(imageType).build());
 		System.out.println("Post file to :"+apiUploadEndpoint);
-		ResponseEntity<String> response = restTemplate.exchange(apiUploadEndpoint,HttpMethod.POST, new HttpEntity<AttachmentInfo>(request, headers), String.class);
+		ResponseEntity<Map> response = restTemplate.exchange(apiUploadEndpoint,HttpMethod.POST, new HttpEntity<AttachmentInfo>(request, headers), Map.class);
 		System.out.println("response from api upload: "+ response.getBody() );
 		return imageFileName;
 	}
