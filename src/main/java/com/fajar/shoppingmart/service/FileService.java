@@ -4,8 +4,11 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
@@ -17,6 +20,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -47,7 +52,7 @@ public class FileService {
 	@PostConstruct
 	public void init() {
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		restTemplate = new RestTemplate();
+		restTemplate = getRestTemplate();
 	}
 
 	int counter = 0;
@@ -120,6 +125,20 @@ public class FileService {
 		ResponseEntity<String> response = restTemplate.exchange(apiUploadEndpoint,HttpMethod.POST, new HttpEntity<AttachmentInfo>(request, headers), String.class);
 		System.out.println("response from api upload: "+ response.getBody() );
 		return imageFileName;
+	}
+	
+	public static RestTemplate getRestTemplate() {
+		RestTemplate restTemplate = new RestTemplate();
+		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();        
+		//Add the Jackson Message converter
+		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+
+		// Note: here we are making this converter to process any kind of response, 
+		// not only application/*json, which is the default behaviour
+		converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));        
+		messageConverters.add(converter);
+		restTemplate.setMessageConverters(messageConverters); 
+		return restTemplate;
 	}
 
 	public synchronized String writeImageFtp(String code, String data) throws IOException {
