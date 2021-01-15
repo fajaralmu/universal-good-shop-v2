@@ -115,8 +115,9 @@ public class FileService {
 		String imageFileName = code + "_" + randomId + "." + imageType;
 		addCounter();
 		AttachmentInfo request = (AttachmentInfo.builder().name(imageFileName).data(imageString).extension(imageType).build());
+		System.out.println("Post file to :"+apiUploadEndpoint);
 		ResponseEntity<String> response = restTemplate.postForEntity(apiUploadEndpoint, new HttpEntity<AttachmentInfo>(request, headers), String.class);
-		log.info("response from api upload: {}", response.getBody() );
+		System.out.println("response from api upload: "+ response.getBody() );
 		return imageFileName;
 	}
 
