@@ -75,6 +75,7 @@ public class WebRequest implements Serializable {
 	private Transaction transaction;
 	
 	private BaseEntity entityObject;
+	private AttachmentInfo attachmentInfo;
 	
 	private String destination;
 	private String username;

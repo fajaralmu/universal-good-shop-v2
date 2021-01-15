@@ -7,26 +7,47 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Date;
 
+import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.fajar.shoppingmart.dto.AttachmentInfo;
 import com.fajar.shoppingmart.service.config.WebConfigService;
 import com.fajar.shoppingmart.util.IconWriter;
 import com.fajar.shoppingmart.util.StringUtil;
 import com.fajar.shoppingmart.util.ThreadUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class FileService {
 
 	@Autowired
 	private WebConfigService webAppConfiguration;
 	@Autowired
 	private FtpResourceService ftpResourceService;
-	@Value("${app.resources.ftpUpload}")
-	private boolean ftpUpload;
+	@Value("${app.resources.uploadType}")
+	private String uploadType;
+	@Value("${app.resources.apiUploadEndpoint}")
+	private String apiUploadEndpoint;
+	
+	private RestTemplate restTemplate;
+	private HttpHeaders headers = new HttpHeaders(); 
+	
+	@PostConstruct
+	public void init() {
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		restTemplate = new RestTemplate();
+	}
 
 	int counter = 0;
 
@@ -66,11 +87,37 @@ public class FileService {
 	}
 
 	public synchronized String writeImage(String code, String data) throws IOException {
-		if (ftpUpload) {
+		log.info("#uploadType: {}", uploadType);
+		if ("ftp".equals(uploadType)) {
 			return writeImageFtp(code, data);
+		}
+		if ("api".equals(uploadType)) {
+			return writeImageApi(code, data);
 		}
 
 		return writeImageToDisk(code, data);
+	}
+
+	private String writeImageApi(String code, String data) {
+		String[] imageData = data.split(",");
+		if (imageData == null || imageData.length < 2) {
+			return null;
+		}
+		// create a buffered image
+		String imageString = imageData[1];
+
+		// extract image name
+		String imageIdentity = imageData[0];
+		String imageType = imageIdentity.replace("data:image/", "").replace(";base64", "");
+		String randomId = String.valueOf(new Date().getTime()) + StringUtil.generateRandomNumber(5) + "_"
+				+ getCounter();
+
+		String imageFileName = code + "_" + randomId + "." + imageType;
+		addCounter();
+		AttachmentInfo request = (AttachmentInfo.builder().name(imageFileName).data(imageString).extension(imageType).build());
+		ResponseEntity<String> response = restTemplate.postForEntity(apiUploadEndpoint, new HttpEntity<AttachmentInfo>(request, headers), String.class);
+		log.info("response from api upload: {}", response.getBody() );
+		return imageFileName;
 	}
 
 	public synchronized String writeImageFtp(String code, String data) throws IOException {
@@ -97,7 +144,7 @@ public class FileService {
 	}
 
 	public synchronized String writeImageToDisk(String code, String data) throws IOException {
-
+		
 		String[] imageData = data.split(",");
 		if (imageData == null || imageData.length < 2) {
 			return null;
