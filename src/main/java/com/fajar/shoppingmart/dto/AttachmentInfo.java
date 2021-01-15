@@ -20,5 +20,6 @@ public class AttachmentInfo implements Serializable{
 	private String name;
 	private String extension;
 	private String data;
+	private String url;
 
 }
