@@ -364,7 +364,7 @@ public class CriteriaBuilder {
 //			TODO: mysql
 //			Criterion restriction = Restrictions.sqlRestriction(mode + "(" + columnName + ")=" + value);
 //			TODO: postgres
-			Criterion restriction = Restrictions.sqlRestriction("date_part('"+mode+"'" + columnName + ")=" + value);
+			Criterion restriction = Restrictions.sqlRestriction("date_part('"+mode+"', " + columnName + ")=" + value);
 
 			return restriction;
 		}

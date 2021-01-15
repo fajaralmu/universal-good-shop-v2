@@ -4,6 +4,8 @@ import static com.fajar.shoppingmart.util.CollectionUtil.arrayToList;
 import static com.fajar.shoppingmart.util.CollectionUtil.convertList;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -299,7 +301,10 @@ public class ProductServiceImpl implements ProductService{
 	private int getProductSalesBetween(String periodFrom, String periodTo, Long productId) {
 
 		try {
-			Object count = productRepository.findProductSalesBetween(periodFrom, periodTo, productId);// .getSingleResult(sql);
+			log.info("Product sales from: {} to: {}", periodFrom, periodTo);
+			Object count = productRepository.findProductSalesBetween(
+					Date.from(LocalDate .parse(periodFrom).atStartOfDay(ZoneId.systemDefault()).toInstant()),
+					Date.from(LocalDate .parse(periodTo).atStartOfDay(ZoneId.systemDefault()).toInstant()), productId);// .getSingleResult(sql);
 			return Integer.parseInt(count.toString());
 		} catch (Exception ex) {
 //			ex.printStackTrace();

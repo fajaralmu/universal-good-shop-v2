@@ -2,6 +2,7 @@ package com.fajar.shoppingmart.repository;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,15 +21,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	@Query(nativeQuery = true, value = "select sum(product_flow.count) as productCount  from product   "
 			+ "left join product_flow on product.id = product_flow.product_id "
 			+ "left join transaction on transaction.id = product_flow.transaction_id  where transaction.type = 'SELLING' and  "
-			+ "month(transaction.transaction_date) = ?1 and  year(transaction.transaction_date) = ?2"
+			+ "date_part('month', transaction.transaction_date) = ?1 and  date_part('year', transaction.transaction_date) = ?2"
 			+ " and product.id = ?3")
 	public Object findProductSales(int month, int year, Long productId);
  
 	@Query(nativeQuery = true, value = "select sum(product_flow.count) as productCount from product_flow  "
 			+ " left join transaction on transaction.id = product_flow.transaction_id "
 			+ " where transaction.type = 'SELLING' and product_flow.product_id = ?3"
-			+ " and transaction.transaction_date >= ?1 and " + " transaction.transaction_date <= ?2 ")
-	public BigDecimal findProductSalesBetween(String period1, String period2, Long productId);
+			+ " and transaction.transaction_date >= ?1 and transaction.transaction_date <= ?2 ")
+	public BigDecimal findProductSalesBetween(Date period1, Date period2, Long productId);
 
 	@Query(nativeQuery = true, value="select * from product where image_url is not null limit 7")
 	public List<Product> getRandomProducts();
