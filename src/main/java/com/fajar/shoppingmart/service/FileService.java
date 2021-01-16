@@ -107,14 +107,12 @@ public class FileService {
 			return null;
 		}
 
-		String imageString = imageData[1];
-
 		// extract image name
 		String imageIdentity = imageData[0];
 		String imageType = imageIdentity.replace("data:image/", "").replace(";base64", "");
 		String randomId = String.valueOf(new Date().getTime()) + StringUtil.generateRandomNumber(5) + "_"
 				+ getCounter();
-
+		progressService.sendProgress(20, httpServletRequest);
 		String imageFileName = code + "_" + randomId + "." + imageType;
 		addCounter();
 		 
@@ -124,13 +122,9 @@ public class FileService {
 			for (int i = 0; i < attachments.size(); i++) {
 				String response = uploadViaAPIv2( attachments.get(i), apiUploadEndpoint);
 				System.out.println("response: "+ i+ " => " + response);
-				if (null != httpServletRequest) {
-					progressService.sendProgress(1, attachments.size(), 80, httpServletRequest);
-				}
+				progressService.sendProgress(1, attachments.size(), 80, httpServletRequest);
 			}
-			if (null != httpServletRequest) {
-				progressService.sendComplete(httpServletRequest);
-			}
+			progressService.sendComplete(httpServletRequest);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
