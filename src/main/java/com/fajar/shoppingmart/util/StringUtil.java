@@ -1,7 +1,8 @@
 package com.fajar.shoppingmart.util;
 
+import java.math.BigDecimal;
 import java.util.Random;
-
+ 
 public class StringUtil {
 
 	static final Random rand = new Random();
@@ -23,12 +24,7 @@ public class StringUtil {
 		}
 		return random;
 	}
-
-	public static void main(String[] xxx) {
-
-		System.out.println(extractCamelCase("fajarAmKkkk"));
-		System.out.println(lowerCaseFirstChar("FAJAR ALM"));
-	}
+ 
 
 	public static String addZeroBefore(Integer number) {
 		return number < 10 ? "0" + number : number.toString();
@@ -91,4 +87,44 @@ public class StringUtil {
 		}
 	}
 
+	public static int base64StringFileSize  (String base64String)   {
+		if (base64String.contains(",")) {
+			base64String = base64String.split(",")[1];
+		}
+		int stringLength = base64String.length();
+
+		double sizeInBytes = 4 * Math.ceil((stringLength / 3))*0.5624896334383812;
+		return new BigDecimal(sizeInBytes).intValue();
+	}
+	
+	public static String[] divideStringInto(String string, int count) {
+		int stringLength = string.length();
+		int partialSize = (stringLength / count);
+		String[] strings = new String[count];
+		int partialSizeCounter = 0;
+		int order = 0;
+		
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int i = 0; i < stringLength; i++) {
+			stringBuilder.append(string.charAt(i));
+			partialSizeCounter++;
+			 
+			if (partialSizeCounter == partialSize) {
+				 
+				partialSizeCounter = 0;
+				strings[order] = stringBuilder.toString()+" -- "+order;
+				order++;
+				
+				stringBuilder = new StringBuilder();
+			}
+		}
+		return strings ;
+	}
+	
+	public static void main(String[] args) {
+		String[] divided = divideStringInto("123456789", 3);
+		for (int i = 0; i < divided.length; i++) {
+			System.out.println(divided[i]);
+		}
+	}
 }

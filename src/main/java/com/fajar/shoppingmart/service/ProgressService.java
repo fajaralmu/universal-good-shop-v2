@@ -70,7 +70,7 @@ public class ProgressService {
 		final double currentProgress = newRequest? 0: progressData.get(requestId);
 		final double overallProgress = currentProgress + newProgress;
 
-		log.info("adding progress: {} for: {}, currentProgress: {} overall: {}", newProgress, requestId, currentProgress, overallProgress);
+		//comment log.info("adding progress: {} for: {}, currentProgress: {} overall: {}", newProgress, requestId, currentProgress, overallProgress);
 		
 		if (overallProgress >= 100) {
 			sendComplete(requestId);
@@ -88,7 +88,7 @@ public class ProgressService {
 	}
 
 	public void sendComplete(String requestId) {
-		log.debug("________COMPLETE PROGRESS FOR {}________", requestId);
+		//comment log.debug("________COMPLETE PROGRESS FOR {}________", requestId);
 		sendProgress(98, requestId);
 		sendProgress(99, requestId);
 		sendProgress(100, requestId);
@@ -97,7 +97,7 @@ public class ProgressService {
 	}
 
 	private void sendProgress(double progress, String requestId) {
-		log.info("Send Progress: {} to {}", progress, requestId);
+		//comment log.info("Send Progress: {} to {}", progress, requestId);
 		try {
 			realtimeService.sendProgress(progress, requestId);
 		} catch (Exception e) {
@@ -127,7 +127,7 @@ public class ProgressService {
 	public void sendComplete(HttpServletRequest httpServletRequest) {
 		String requestId = getRequestId(httpServletRequest);
 
-		log.info("%%%%%%|COMPLETE PROGRESS|%%%%%%% for {}", requestId);
+		//comment log.info("%%%%%%|COMPLETE PROGRESS|%%%%%%% for {}", requestId);
 		realtimeService.sendProgress(100, requestId);
 
 	}
@@ -136,19 +136,19 @@ public class ProgressService {
 		ProgressService ps = new ProgressService();
 		String requestId = "q03i4934i93";
 		ps.init(requestId);
-		log.info("1");
+		//comment log.info("1");
 		ps.sendProgress(1, 2, 30, false, requestId);
-		log.info("2");
+		//comment log.info("2");
 		ps.sendProgress(1, 2, 30, false, requestId);
-		log.info("3");
+		//comment log.info("3");
 		ps.sendProgress(1, 3, 40, false, requestId);
-		log.info("4");
+		//comment log.info("4");
 		ps.sendProgress(1, 3, 40, false, requestId);
-		log.info("5");
+		//comment log.info("5");
 		ps.sendProgress(1, 3, 40, false, requestId);
-		log.info("6");
+		//comment log.info("6");
 		ps.sendProgress(1, 2, 30, false, requestId);
-		log.info("7");
+		//comment log.info("7");
 		ps.sendProgress(1, 2, 30, false, requestId);
 	}
 

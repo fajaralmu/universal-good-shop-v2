@@ -29,7 +29,7 @@ public class RealtimeService2 {
 	}
 
 	public void sendProgress(double progress, String requestId) {
-		System.out.println(">>>>>>>>>>SEND PROGRESS:" + progress + " (" + requestId + ")");
+	//	System.out.println(">>>>>>>>>>SEND PROGRESS:" + progress + " (" + requestId + ")");
 		sendProgress(WebResponse.builder().requestId(requestId).percentage(progress).build());
 	}
 

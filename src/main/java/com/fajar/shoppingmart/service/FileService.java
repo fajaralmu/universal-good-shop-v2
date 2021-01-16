@@ -1,35 +1,27 @@
 package com.fajar.shoppingmart.service;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.fajar.shoppingmart.dto.AttachmentInfo;
 import com.fajar.shoppingmart.service.config.WebConfigService;
@@ -51,16 +43,15 @@ public class FileService {
 	@Value("${app.resources.uploadType}")
 	private String uploadType;
 	@Value("${app.resources.apiUploadEndpoint}")
-	private String apiUploadEndpoint;
-
-	private RestTemplate restTemplate;
+	private String apiUploadEndpoint; 
 	private HttpHeaders headers = new HttpHeaders();
 	static ObjectMapper mapper = new ObjectMapper();
-
+	@Autowired
+	private ProgressService progressService;
 	@PostConstruct
 	public void init() {
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		buildRestTemplate();
+		 
 	}
 
 	int counter = 0;
@@ -96,18 +87,21 @@ public class FileService {
 	}
 
 	public synchronized String writeImage(String code, String data) throws IOException {
+		return writeImage(code, data, null);
+	}
+		public synchronized String writeImage(String code, String data, HttpServletRequest httpServletRequest) throws IOException {
 		log.info("#uploadType: {}", uploadType);
 		if ("ftp".equals(uploadType)) {
 			return writeImageFtp(code, data);
 		}
 		if ("api".equals(uploadType)) {
-			return writeImageApi(code, data);
+			return writeImageApi(code, data, httpServletRequest);
 		}
 
 		return writeImageToDisk(code, data);
 	}
 
-	private String writeImageApi(String code, String data) {
+	private String writeImageApi(String code, String data, HttpServletRequest httpServletRequest) {
 		String[] imageData = data.split(",");
 		if (imageData == null || imageData.length < 2) {
 			return null;
@@ -123,40 +117,40 @@ public class FileService {
 
 		String imageFileName = code + "_" + randomId + "." + imageType;
 		addCounter();
-		AttachmentInfo request = (AttachmentInfo.builder().name(imageFileName).data(imageString).extension(imageType)
-				.url(apiUploadEndpoint).build());
+		 
 		System.out.println("Post file to :" + apiUploadEndpoint);
 		try {
-			String response = uploadViaAPIv2( request);
-			System.out.println("response: " + response);
+			List<AttachmentInfo> attachments = AttachmentInfo.extractAttachmentInfos(data, imageFileName, imageType);
+			for (int i = 0; i < attachments.size(); i++) {
+				String response = uploadViaAPIv2( attachments.get(i), apiUploadEndpoint);
+				System.out.println("response: "+ i+ " => " + response);
+				if (null != httpServletRequest) {
+					progressService.sendProgress(1, attachments.size(), 80, httpServletRequest);
+				}
+			}
+			if (null != httpServletRequest) {
+				progressService.sendComplete(httpServletRequest);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return imageFileName;
-	}
-
-	void buildRestTemplate() {
-		if (null != restTemplate) {
-			return;
-		}
-		restTemplate = new RestTemplate();
-//		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-//		converter.setSupportedMediaTypes(Collections.singletonList(MediaType.TEXT_HTML));
-//		restTemplate.getMessageConverters().add(converter);
-
-	}
+	} 
 
 	public static void main(String[] args) throws Exception {
 		AttachmentInfo request = (AttachmentInfo.builder().name("TEST.jpg").data("dddd").extension("jpg").build());
 	}
 
-	public static String uploadViaAPIv2(  AttachmentInfo request) {
+	public static String uploadViaAPIv2(  AttachmentInfo request, String url) {
 
 		LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 		String response;
 		RestTemplate rt = new RestTemplate();
 		try {
-			map.add("data", request.getData());
+			map.add("partialData", request.getData());
+			map.add("order", request.getOrder());
+			map.add("total", request.getTotal());
 			map.add("name", request.getName());
 			map.add("extension", request.getExtension());
 
@@ -164,13 +158,15 @@ public class FileService {
 			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
 			HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
-			response = rt.postForObject(request.getUrl(), requestEntity, String.class);
+			ResponseEntity<String> responseEntity = rt.postForEntity(url, requestEntity, String.class);
+			log.info("code: {}", responseEntity.getStatusCode());
+			response = responseEntity.getBody();
 
 		} catch (HttpStatusCodeException e) {
-
+			e.printStackTrace();
 			response = e.getResponseBodyAsString();
 		} catch (Exception e) {
-
+			e.printStackTrace();
 			response = e.getMessage();
 		}
 		return response;

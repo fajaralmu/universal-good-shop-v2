@@ -18,6 +18,7 @@ import com.fajar.shoppingmart.repository.AuthorityRepository;
 import com.fajar.shoppingmart.repository.EntityRepository;
 import com.fajar.shoppingmart.repository.UserRepository;
 import com.fajar.shoppingmart.service.FileService;
+import com.fajar.shoppingmart.service.ProgressService;
 import com.fajar.shoppingmart.service.SessionValidationService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class DefaultUserService {
 	private FileService fileService;
 	@Autowired
 	private EntityRepository entityRepository;
+	
 	
 	private BCryptPasswordEncoder passwordEncoder;
 	
@@ -104,14 +106,14 @@ public class DefaultUserService {
 		final User loggedUser = sessionValidationService.getLoggedUser(httpServletRequest);
 		final User user = webRequest.getUser();
 		 
-		updateUserData(loggedUser, user);
+		updateUserData(loggedUser, user, httpServletRequest);
 		
 		WebResponse response = new WebResponse();
 		response.setUser(loggedUser);
 		return response;
 	}
 
-	private void updateUserData(User loggedUser, User user) {
+	private void updateUserData(User loggedUser, User user, HttpServletRequest httpServletRequest) {
 		if (user.getUsername() != null && !user.getUsername().isEmpty()) {
 			loggedUser.setUsername(user.getUsername());
 		}
@@ -123,7 +125,7 @@ public class DefaultUserService {
 		}
 		if (user.getProfileImage() != null && !user.getProfileImage().isEmpty()) {
 			try {
-				String newName = fileService.writeImage(User.class.getSimpleName(), user.getProfileImage());
+				String newName = fileService.writeImage(User.class.getSimpleName(), user.getProfileImage(), httpServletRequest);
 				loggedUser.setProfileImage(newName);
 			} catch (IOException e) {
 				e.printStackTrace();
