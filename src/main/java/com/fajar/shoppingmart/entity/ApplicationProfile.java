@@ -79,6 +79,9 @@ public class ApplicationProfile extends BaseEntity {
 	@Column(name = "font_color")
 	private String fontColor;
 	
+	@Transient
+	private String assetsPath;
+	
 	@JsonIgnore
 	@Transient
 	private String FooterIconClassValue;

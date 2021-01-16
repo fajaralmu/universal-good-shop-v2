@@ -6,6 +6,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fajar.shoppingmart.dto.FontAwesomeIcon;
@@ -28,6 +29,8 @@ public class DefaultApplicationProfileService {
 	private EntityRepository entityRepository; 
 	@Autowired
 	private FileService fileService;
+	@Value("${app.resources.assets.path}")
+	private String assetsPath;
 
 	private ApplicationProfile applicationProfile;
 	@PostConstruct
@@ -40,6 +43,7 @@ public class DefaultApplicationProfileService {
 	}
 	
 	public ApplicationProfile getApplicationProfile() {
+		applicationProfile.setAssetsPath(assetsPath);
 		return applicationProfile;
 	}
 
