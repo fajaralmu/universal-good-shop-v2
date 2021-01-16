@@ -41,9 +41,13 @@ public class AttachmentInfo implements Serializable{
 			result.add(attachmentInfo);
 			return result;
 		}
-		
 		int division = fileSize/MAX_SIZE;
-		String[] dividedString = StringUtil.divideStringInto(data, division);
+		int partialSize =  data.length()/division;
+		System.out.println("fileSize: "+fileSize);
+		System.out.println("Max fileSize: "+MAX_SIZE);
+		System.out.println("division: "+division);
+		System.out.println("partialSize: "+partialSize);
+		String[] dividedString = StringUtil.divideStringInto(data, partialSize);
 		for (int i = 0; i < dividedString.length; i++) {
 			AttachmentInfo attachmentInfo = new AttachmentInfo();
 			attachmentInfo.setData(dividedString[i]);

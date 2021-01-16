@@ -97,13 +97,14 @@ public class StringUtil {
 		return new BigDecimal(sizeInBytes).intValue();
 	}
 	
-	public static String[] divideStringInto(String string, int count) {
+	public static String[] divideStringInto(String string, int partialSize) {
 		int stringLength = string.length();
-		int partialSize = (stringLength / count);
-		String[] strings = new String[count];
+//		int partialSize = (stringLength / count);
+		int arrayCOunt = (stringLength) / partialSize;
+		String[] strings = new String[ arrayCOunt];
 		int partialSizeCounter = 0;
 		int order = 0;
-		
+		System.out.println("partialSize: "+partialSize+ " arrayCOunt: "+arrayCOunt);
 		StringBuilder stringBuilder = new StringBuilder();
 		for (int i = 0; i < stringLength; i++) {
 			stringBuilder.append(string.charAt(i));
@@ -112,17 +113,21 @@ public class StringUtil {
 			if (partialSizeCounter == partialSize) {
 				 
 				partialSizeCounter = 0;
-				strings[order] = stringBuilder.toString()+" -- "+order;
+				strings[order] = stringBuilder.toString();
 				order++;
 				
 				stringBuilder = new StringBuilder();
+			} else
+			if (i == stringLength - 1) {
+				 strings[order-1] = stringBuilder.toString();
 			}
+//			System.out.println("ORDER: "+order);
 		}
 		return strings ;
 	}
 	
 	public static void main(String[] args) {
-		String[] divided = divideStringInto("123456789", 3);
+		String[] divided = divideStringInto("12345678912345", 3);
 		for (int i = 0; i < divided.length; i++) {
 			System.out.println(divided[i]);
 		}
