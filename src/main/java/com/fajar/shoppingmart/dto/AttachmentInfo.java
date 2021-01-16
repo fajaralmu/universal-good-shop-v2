@@ -21,7 +21,7 @@ public class AttachmentInfo implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 8953767869805765435L;
-	private static final int MAX_SIZE = 9000; //9KB
+	private static final double MAX_SIZE = 9000.d; //9KB
 	private String name;
 	private String extension;
 	private String data;
@@ -41,8 +41,8 @@ public class AttachmentInfo implements Serializable{
 			result.add(attachmentInfo);
 			return result;
 		}
-		int division = fileSize/MAX_SIZE;
-		int partialSize =  data.length()/division;
+		double division =  Math.ceil(fileSize/MAX_SIZE);
+		double partialSize =  Math.ceil(data.length()/division);
 		System.out.println("fileSize: "+fileSize);
 		System.out.println("Max fileSize: "+MAX_SIZE);
 		System.out.println("division: "+division);
@@ -51,7 +51,7 @@ public class AttachmentInfo implements Serializable{
 		for (int i = 0; i < dividedString.length; i++) {
 			AttachmentInfo attachmentInfo = new AttachmentInfo();
 			attachmentInfo.setData(dividedString[i]);
-			attachmentInfo.setTotal(division);
+			attachmentInfo.setTotal((int)division);
 			attachmentInfo.setOrder(i + 1);
 			attachmentInfo.setName(name);
 			result.add(attachmentInfo);

@@ -97,10 +97,10 @@ public class StringUtil {
 		return new BigDecimal(sizeInBytes).intValue();
 	}
 	
-	public static String[] divideStringInto(String string, int partialSize) {
+	public static String[] divideStringInto(String string, double partialSize) {
 		int stringLength = string.length();
 //		int partialSize = (stringLength / count);
-		int arrayCOunt = (stringLength) / partialSize;
+		int arrayCOunt = (int) Math.ceil(stringLength / partialSize);
 		String[] strings = new String[ arrayCOunt];
 		int partialSizeCounter = 0;
 		int order = 0;
@@ -119,10 +119,16 @@ public class StringUtil {
 				stringBuilder = new StringBuilder();
 			} else
 			if (i == stringLength - 1) {
-				 strings[order-1] = stringBuilder.toString();
+				 strings[order] = stringBuilder.toString();
 			}
 //			System.out.println("ORDER: "+order);
 		}
+		int dividedStringLengthSummary = 0;
+		for (int i = 0; i < strings.length; i++) {
+			if (strings[i] == null) continue;
+			dividedStringLengthSummary += strings[i].length();
+		}
+		System.out.println("String length: "+ stringLength+", didived string length accumulation: "+ dividedStringLengthSummary);
 		return strings ;
 	}
 	
