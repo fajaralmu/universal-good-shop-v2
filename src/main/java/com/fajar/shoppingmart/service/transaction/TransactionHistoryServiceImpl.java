@@ -251,8 +251,8 @@ public class TransactionHistoryServiceImpl implements TransactionHistoryService 
 	@Override
 	public int getMinTransactionYear() {
 		List<Object> result = transactionRepository.findTransactionYearAsc(PageRequest.of(0, 1));
-
-		if (result == null) {
+		
+		if (result == null || result.size() == 0) {
 			return Calendar.getInstance().get(Calendar.YEAR);
 		}
 		int resultInt = Integer.parseInt(result.get(0).toString());
