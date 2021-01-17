@@ -88,8 +88,12 @@ public class CashBalanceService {
 		Object[] result = (Object[]) object;
 		
 		CashBalance cashBalance = new CashBalance();
-		cashBalance.setCreditAmt(Long.valueOf(result[0].toString()));
-		cashBalance.setDebitAmt(Long.valueOf(result[1].toString()));
+		if (null != result[0]) {
+			cashBalance.setCreditAmt(Long.valueOf(result[0].toString()));
+		}
+		if (null != result[1]) {
+			cashBalance.setDebitAmt(Long.valueOf(result[1].toString()));
+		}
 		cashBalance.setActualBalance(Long.valueOf(result[2].toString()));
 		
 		return cashBalance;
