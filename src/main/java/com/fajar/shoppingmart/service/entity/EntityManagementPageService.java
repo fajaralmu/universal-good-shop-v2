@@ -84,6 +84,7 @@ public class EntityManagementPageService {
 		result.add(entityRepository.getConfig("customer").setIconClassName("fas fa-users"));
 		result.add(entityRepository.getConfig("supplier").setIconClassName("fas fa-dolly-flatbed"));
 		result.add(entityRepository.getConfig("transaction").setIconClassName("fas fa-book")); 
+		result.add(entityRepository.getConfig("cashbalance").setIconClassName("fas fa-book")); 
 //		result.add(entityRepository.getConfig("page")); 
 //		result.add(entityRepository.getConfig("menu")); 
 		

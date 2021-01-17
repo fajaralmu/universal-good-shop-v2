@@ -44,7 +44,7 @@ public class CashBalance extends BaseEntity {/**
 	@Enumerated(EnumType.STRING)
 	@Column
 	private CashType type;
-	@FormField
+	@FormField(type = FieldType.FIELD_TYPE_DATE)
 	private Date date;
 	@FormField
 	private String referenceId;

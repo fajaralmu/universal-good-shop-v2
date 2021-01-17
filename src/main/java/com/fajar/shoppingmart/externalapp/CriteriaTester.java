@@ -3,7 +3,9 @@ package com.fajar.shoppingmart.externalapp;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.persistence.Entity;
@@ -17,8 +19,10 @@ import org.hibernate.Transaction;
 import com.fajar.shoppingmart.dto.WebRequest;
 import com.fajar.shoppingmart.entity.BaseEntity;
 import com.fajar.shoppingmart.entity.Product;
+import com.fajar.shoppingmart.entity.Unit;
 import com.fajar.shoppingmart.querybuilder.CriteriaBuilder;
 import com.fajar.shoppingmart.util.EntityUtil;
+import com.fajar.shoppingmart.util.StringUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CriteriaTester {
@@ -46,7 +50,7 @@ public class CriteriaTester {
 
 	}
 
-	public static List<Class> getIndependentEntities(List<Class<?>> managedEntities) { 
+	public static List<Class> getIndependentEntities(List<Class<?>> managedEntities) {
 		List<Class> independentEntities = new ArrayList<>();
 		for (Class entityCLass : managedEntities) {
 //			System.out.println("-"+entityCLass);
@@ -62,8 +66,9 @@ public class CriteriaTester {
 
 		return independentEntities;
 	}
+
 	public static List<Class<?>> getDependentEntities(List<Class<?>> managedEntities) {
-		 
+
 		List<Class<?>> independentEntities = new ArrayList<>();
 		for (Class entityCLass : managedEntities) {
 //			System.out.println("-"+entityCLass);
@@ -76,7 +81,7 @@ public class CriteriaTester {
 				independentEntities.add(entityCLass);
 			}
 		}
-		
+
 		return independentEntities;
 	}
 
@@ -91,32 +96,53 @@ public class CriteriaTester {
 	}
 
 	public static void main(String[] args) throws Exception {
-//		setSession();
+		setSession();
+		Transaction tx = testSession.beginTransaction();
 		List<Product> objetsFromFile = getObjectListFromFiles(Product.class);
+		Map<Character, Integer> charCount = new HashMap<Character, Integer>();
+		for (int i = 0; i < StringUtil.ALPHABET.length(); i++) {
+			charCount.put(StringUtil.ALPHABET.charAt(i), 0);
+		}
 		for (int i = 0; i < objetsFromFile.size(); i++) {
 			Product obj = objetsFromFile.get(i);
-			System.out.println(i+" - "+obj);
+			String name = obj.getName().toLowerCase();
+			Character firstChar = name.charAt(0);
+			Integer count = charCount.get(firstChar);
+			if (count != null && count < 3) {
+				charCount.put(firstChar, count+1);
+				System.out.println(i + " - " + name);
+				if (testSession.get(Unit.class, obj.getUnit().getId()) == null) {
+					obj.setImageUrl(null);
+					String unitName = obj.getUnit().getName()+" new "+i;
+					obj.getUnit().setName(unitName);
+					testSession.save(obj.getUnit());
+				}
+				testSession.save(obj);
+			}
+			
 		}
+		tx.commit();
 		System.exit(0);
 	}
 
 	static void insertRecords() throws Exception {
 		List<Class<?>> entities = getDependentEntities(getDependentEntities(managedEntities));
 		Transaction tx = testSession.beginTransaction();
-		 
-		for (Class clazz : entities) { 
+
+		for (Class clazz : entities) {
 			insertRecord(clazz);
 		}
 		tx.commit();
 	}
-	
-	private static <T extends BaseEntity> List<T> getObjectListFromFiles(Class<T> clazz) throws  Exception {
+
+	private static <T extends BaseEntity> List<T> getObjectListFromFiles(Class<T> clazz) throws Exception {
 		List<T> result = new ArrayList<>();
 		String dirPath = outputDir + "//" + clazz.getSimpleName();
 		File file = new File(dirPath);
 		String[] fileNames = file.list();
 		int c = 0;
-		if (  fileNames == null) return result;
+		if (fileNames == null)
+			return result;
 		for (String fileName : fileNames) {
 			String fullPath = dirPath + "//" + fileName;
 			File jsonFile = new File(fullPath);
@@ -124,11 +150,11 @@ public class CriteriaTester {
 			T entity = (T) mapper.readValue(content, clazz);
 			result.add(entity);
 		}
-		return result ;
+		return result;
 	}
-	
-	private static void insertRecord(Class clazz) throws Exception{
-		 
+
+	private static void insertRecord(Class clazz) throws Exception {
+
 		System.out.println(clazz);
 		List<BaseEntity> list = getObjectListFromFiles(clazz);
 		int c = 0;
@@ -138,9 +164,9 @@ public class CriteriaTester {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			//if (c > 50) return;
+			// if (c > 50) return;
 			c++;
-			System.out.println(clazz+" "+c + "/" + list.size());
+			System.out.println(clazz + " " + c + "/" + list.size());
 		}
 	}
 
@@ -222,17 +248,20 @@ public class CriteriaTester {
 
 		return properties;
 	}
+
 	private static Properties additionalPropertiesPostgres() {
-		
+
 		String dialect = "org.hibernate.dialect.PostgreSQLDialect";
 		String ddlAuto = "update";
-		
+
 		Properties properties = new Properties();
 		properties.setProperty("hibernate.dialect", dialect);
-		properties.setProperty("hibernate.connection.url", "jdbc:postgresql://ec2-54-157-12-250.compute-1.amazonaws.com:5432/d1eu0qub2adiiv");
+		properties.setProperty("hibernate.connection.url",
+				"jdbc:postgresql://ec2-54-157-12-250.compute-1.amazonaws.com:5432/d1eu0qub2adiiv");
 		properties.setProperty("hibernate.connection.username", "veqlrgwoojdelw");
-		properties.setProperty("hibernate.connection.password", "d8b34a7856fb4ed5e56d082db5a62dd3b527dd848e95ce1e6a3652001a04f7fe");
-		
+		properties.setProperty("hibernate.connection.password",
+				"d8b34a7856fb4ed5e56d082db5a62dd3b527dd848e95ce1e6a3652001a04f7fe");
+
 		properties.setProperty("hibernate.connection.driver_class", org.postgresql.Driver.class.getCanonicalName());
 		properties.setProperty("hibernate.current_session_context_class", "thread");
 		properties.setProperty("hibernate.show_sql", "true");

@@ -107,13 +107,13 @@ public class FileService {
 		if (imageData == null || imageData.length < 2) {
 			return null;
 		}
-
+		progressService.sendProgress(10, httpServletRequest);
 		// extract image name
 		String imageIdentity = imageData[0];
 		String imageType = imageIdentity.replace("data:image/", "").replace(";base64", "");
 		String randomId = String.valueOf(new Date().getTime()) + StringUtil.generateRandomNumber(5) + "_"
 				+ getCounter();
-		progressService.sendProgress(20, httpServletRequest);
+		progressService.sendProgress(10, httpServletRequest);
 		String imageFileName = code + "_" + randomId + "." + imageType;
 		addCounter();
 		 

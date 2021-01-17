@@ -7,6 +7,7 @@ public class StringUtil {
 
 	static final Random rand = new Random();
 
+	public static final String  ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 	public static final String[] GREEK_NUMBER = new String[] { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX",
 			"X" };
 
