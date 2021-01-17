@@ -17,8 +17,8 @@ import com.fajar.shoppingmart.dto.WebResponse;
 import com.fajar.shoppingmart.entity.BaseEntity;
 import com.fajar.shoppingmart.entity.custom.EntityUpdateInterceptor;
 import com.fajar.shoppingmart.repository.EntityRepository;
-import com.fajar.shoppingmart.service.FileService;
 import com.fajar.shoppingmart.service.LogProxyFactory;
+import com.fajar.shoppingmart.service.resources.FileService;
 import com.fajar.shoppingmart.util.CollectionUtil;
 import com.fajar.shoppingmart.util.EntityUtil;
 

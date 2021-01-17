@@ -17,9 +17,9 @@ import com.fajar.shoppingmart.entity.User;
 import com.fajar.shoppingmart.repository.AuthorityRepository;
 import com.fajar.shoppingmart.repository.EntityRepository;
 import com.fajar.shoppingmart.repository.UserRepository;
-import com.fajar.shoppingmart.service.FileService;
 import com.fajar.shoppingmart.service.ProgressService;
 import com.fajar.shoppingmart.service.SessionValidationService;
+import com.fajar.shoppingmart.service.resources.FileService;
 
 import lombok.extern.slf4j.Slf4j;
 

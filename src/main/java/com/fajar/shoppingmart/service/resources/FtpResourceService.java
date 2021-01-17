@@ -1,4 +1,4 @@
-package com.fajar.shoppingmart.service;
+package com.fajar.shoppingmart.service.resources;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;

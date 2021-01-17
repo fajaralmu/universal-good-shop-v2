@@ -15,7 +15,7 @@ import com.fajar.shoppingmart.dto.WebResponse;
 import com.fajar.shoppingmart.entity.ApplicationProfile;
 import com.fajar.shoppingmart.repository.AppProfileRepository;
 import com.fajar.shoppingmart.repository.EntityRepository;
-import com.fajar.shoppingmart.service.FileService;
+import com.fajar.shoppingmart.service.resources.FileService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -78,14 +78,14 @@ public class DefaultApplicationProfileService {
 		
 		final ApplicationProfile actualAppProfile = getApplicationProfile();
 		final ApplicationProfile applicationProfile = webRequest.getProfile();
-		updateApplicationProfileData(actualAppProfile, applicationProfile);
+		updateApplicationProfileData(actualAppProfile, applicationProfile, httpServletRequest);
 		
 		WebResponse response = new WebResponse();
 		response.setApplicationProfile(actualAppProfile);
 		return response;
 	}
 	private void updateApplicationProfileData(ApplicationProfile actualAppProfile,
-			ApplicationProfile appProfile) {
+			ApplicationProfile appProfile, HttpServletRequest httpServletRequest) {
 		 
 		if (notEmpty(appProfile.getName())) {
 			actualAppProfile.setName(appProfile.getName());
@@ -107,7 +107,7 @@ public class DefaultApplicationProfileService {
 		}
 		if (notEmpty(appProfile.getBackgroundUrl()) && appProfile.getBackgroundUrl().startsWith("data:image")) {
 			try {
-				String backgroundUrl = fileService.writeImage(ApplicationProfile.class.getSimpleName(), appProfile.getBackgroundUrl());
+				String backgroundUrl = fileService.writeImage(ApplicationProfile.class.getSimpleName(), appProfile.getBackgroundUrl(), httpServletRequest);
 				actualAppProfile.setBackgroundUrl(backgroundUrl );
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

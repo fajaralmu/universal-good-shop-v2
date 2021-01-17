@@ -1,7 +1,6 @@
 package com.fajar.shoppingmart.externalapp;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +16,7 @@ import org.hibernate.Transaction;
 
 import com.fajar.shoppingmart.dto.WebRequest;
 import com.fajar.shoppingmart.entity.BaseEntity;
-import com.fajar.shoppingmart.entity.Category;
-import com.fajar.shoppingmart.entity.Customer;
 import com.fajar.shoppingmart.entity.Product;
-import com.fajar.shoppingmart.entity.Supplier;
-import com.fajar.shoppingmart.entity.Unit;
 import com.fajar.shoppingmart.querybuilder.CriteriaBuilder;
 import com.fajar.shoppingmart.util.EntityUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +29,7 @@ public class CriteriaTester {
 	static Session testSession;
 
 	static ObjectMapper mapper = new ObjectMapper();
-	static List<Class> managedEntities = new ArrayList<>();
+	static List<Class<?>> managedEntities = new ArrayList<>();
 
 	public static void main2(String[] args) throws Exception {
 
@@ -51,7 +46,7 @@ public class CriteriaTester {
 
 	}
 
-	public static List<Class> getIndependentEntities(List<Class> managedEntities) { 
+	public static List<Class> getIndependentEntities(List<Class<?>> managedEntities) { 
 		List<Class> independentEntities = new ArrayList<>();
 		for (Class entityCLass : managedEntities) {
 //			System.out.println("-"+entityCLass);
@@ -67,9 +62,9 @@ public class CriteriaTester {
 
 		return independentEntities;
 	}
-	public static List<Class> getDependentEntities(List<Class> managedEntities) {
+	public static List<Class<?>> getDependentEntities(List<Class<?>> managedEntities) {
 		 
-		List<Class> independentEntities = new ArrayList<>();
+		List<Class<?>> independentEntities = new ArrayList<>();
 		for (Class entityCLass : managedEntities) {
 //			System.out.println("-"+entityCLass);
 			List<Field> fields = EntityUtil.getDeclaredFields(entityCLass);
@@ -85,9 +80,9 @@ public class CriteriaTester {
 		return independentEntities;
 	}
 
-	private static boolean printDependentFields(Field field, List<Class> managedEntities) {
+	private static boolean printDependentFields(Field field, List<Class<?>> managedEntities) {
 
-		for (Class class3 : managedEntities) {
+		for (Class<?> class3 : managedEntities) {
 			if (field.getType().equals(class3)) {
 				return true;
 			}
@@ -96,25 +91,17 @@ public class CriteriaTester {
 	}
 
 	public static void main(String[] args) throws Exception {
-		setSession();
-		Transaction tx = testSession.beginTransaction();
-		insertRecord(Customer.class);
-		insertRecord(Supplier.class);
-		tx.commit();
-//		printEntitiesNames(); 
-//		for (Class _class : managedEntities) {
-//			printRecords(_class);
-//		}
-//		try {
-//			insertRecords();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+//		setSession();
+		List<Product> objetsFromFile = getObjectListFromFiles(Product.class);
+		for (int i = 0; i < objetsFromFile.size(); i++) {
+			Product obj = objetsFromFile.get(i);
+			System.out.println(i+" - "+obj);
+		}
 		System.exit(0);
 	}
 
-	static void insertRecords() throws IOException {
-		List<Class> entities = getDependentEntities(getDependentEntities(managedEntities));
+	static void insertRecords() throws Exception {
+		List<Class<?>> entities = getDependentEntities(getDependentEntities(managedEntities));
 		Transaction tx = testSession.beginTransaction();
 		 
 		for (Class clazz : entities) { 
@@ -122,21 +109,30 @@ public class CriteriaTester {
 		}
 		tx.commit();
 	}
-
-	private static void insertRecord(Class clazz) throws IOException{
-		 
-		System.out.println(clazz);
+	
+	private static <T extends BaseEntity> List<T> getObjectListFromFiles(Class<T> clazz) throws  Exception {
+		List<T> result = new ArrayList<>();
 		String dirPath = outputDir + "//" + clazz.getSimpleName();
 		File file = new File(dirPath);
 		String[] fileNames = file.list();
 		int c = 0;
-		if (  fileNames == null) return;
+		if (  fileNames == null) return result;
 		for (String fileName : fileNames) {
 			String fullPath = dirPath + "//" + fileName;
 			File jsonFile = new File(fullPath);
 			String content = FileUtils.readFileToString(jsonFile);
-			BaseEntity entity = (BaseEntity) mapper.readValue(content, clazz);
-			 
+			T entity = (T) mapper.readValue(content, clazz);
+			result.add(entity);
+		}
+		return result ;
+	}
+	
+	private static void insertRecord(Class clazz) throws Exception{
+		 
+		System.out.println(clazz);
+		List<BaseEntity> list = getObjectListFromFiles(clazz);
+		int c = 0;
+		for (BaseEntity entity : list) {
 			try {
 				testSession.save(entity);
 			} catch (Exception e) {
@@ -144,7 +140,7 @@ public class CriteriaTester {
 			}
 			//if (c > 50) return;
 			c++;
-			System.out.println(clazz+" "+c + "/" + fileNames.length);
+			System.out.println(clazz+" "+c + "/" + list.size());
 		}
 	}
 
@@ -175,8 +171,8 @@ public class CriteriaTester {
 		testSession = factory.openSession();
 	}
 
-	static List<Class> getManagedEntities() {
-		List<Class> returnClasses = new ArrayList<Class>();
+	static List<Class<?>> getManagedEntities() {
+		List<Class<?>> returnClasses = new ArrayList<>();
 		List<String> names = TypeScriptModelCreators.getJavaFiles(inputDir);
 		List<Class> classes = TypeScriptModelCreators.getJavaClasses("com.fajar.shoppingmart.entity", names);
 		for (Class class1 : classes) {

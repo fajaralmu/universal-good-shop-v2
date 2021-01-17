@@ -1,4 +1,4 @@
-package com.fajar.shoppingmart.service;
+package com.fajar.shoppingmart.service.resources;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

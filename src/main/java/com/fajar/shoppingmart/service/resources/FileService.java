@@ -1,4 +1,4 @@
-package com.fajar.shoppingmart.service;
+package com.fajar.shoppingmart.service.resources;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -24,6 +24,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fajar.shoppingmart.dto.AttachmentInfo;
+import com.fajar.shoppingmart.service.ProgressService;
 import com.fajar.shoppingmart.service.config.WebConfigService;
 import com.fajar.shoppingmart.util.IconWriter;
 import com.fajar.shoppingmart.util.StringUtil;

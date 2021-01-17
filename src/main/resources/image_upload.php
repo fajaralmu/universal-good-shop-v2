@@ -1,4 +1,7 @@
 <?php
+/*
+    upload file to apache server script
+*/
 
     $method = $_SERVER['REQUEST_METHOD'];
     if ($method != 'POST') {

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.fajar.shoppingmart.service.FtpResourceService;
+import com.fajar.shoppingmart.service.resources.FtpResourceService;
 
 import lombok.extern.slf4j.Slf4j;
 
