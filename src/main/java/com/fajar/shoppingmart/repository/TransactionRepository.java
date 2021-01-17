@@ -24,7 +24,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 	@Query(nativeQuery = true, value = "select * from  transaction  "
 			+ "left join product_flow on product_flow.transaction_id = transaction.id "
 			+ "where product_flow.product_id = ?1 and  transaction . type  = 'PURCHASING' "
-			+ "group by supplier_id limit ?2 offset ?3")
+			+ "group by transaction.supplier_id, transaction.id , product_flow.id limit ?2 offset ?3")
 	public List<Transaction> findProductSupplier(Long id, int limit, int offset);
 
 	@Query(nativeQuery = true, value = "select  * from  transaction  left join product_flow on  product_flow .transaction_id= transaction .id  "
