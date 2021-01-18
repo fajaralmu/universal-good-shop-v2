@@ -41,7 +41,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 			"where transaction.supplier_id = ?1 group by product.id")
 	public List<Product> getProductsSuppliedBySupplier(long supplierId);
 
-	@Query(nativeQuery = true, value = "select count(*) from product")
+	@Query( value = "select count(p) from Product p")
 	public BigInteger getTotalProduct();
 	
 	
