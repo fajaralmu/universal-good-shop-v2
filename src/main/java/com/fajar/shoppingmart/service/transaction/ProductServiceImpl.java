@@ -16,6 +16,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.fajar.shoppingmart.dto.Filter;
@@ -285,7 +286,7 @@ public class ProductServiceImpl implements ProductService{
 
 		try {
 			Object result = productRepository.findProductSales(month, year, productId);// .getSingleResult(sql);
-			int count = Integer.parseInt(result.toString());
+			int count = result == null ? 0 : Integer.parseInt(result.toString());
 			ProductSales sales = new ProductSales();
 			sales.setSales(count);
 			sales.setMonth(month);
@@ -349,8 +350,8 @@ public class ProductServiceImpl implements ProductService{
 		String periodFrom = DateUtil.getFullFirstDate(filter.getMonth(), filter.getYear());
 		String periodTo = DateUtil.getFullFirstDate(filter.getMonthTo(), filter.getYearTo()); 
 
-		List<Product> products = productRepository.getByLimitAndOffset(filter.getLimit(),
-				filter.getLimit() * filter.getPage(), productName);
+		List<Product> products = productRepository.getByLimitAndOffset(
+				PageRequest.of(filter.getLimit() * filter.getPage(), filter.getLimit()), productName);
 
 		List<ProductSales> productSalesList = new ArrayList<>();
 

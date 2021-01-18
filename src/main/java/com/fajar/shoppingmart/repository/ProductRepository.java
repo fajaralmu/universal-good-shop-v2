@@ -5,18 +5,17 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.fajar.shoppingmart.entity.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-	//postgres
-	@Query(nativeQuery = true, value = "select * from product where name ilike %?3% limit ?1 offset ?2")
-// mysql
-	//	@Query(nativeQuery = true, value = "select * from product where name like %?3% limit ?1 offset ?2")
-	public List<Product> getByLimitAndOffset(int limit, int offset, String name);
+	@Query( "select p from Product p where p.name LIKE CONCAT('%',:name,'%')")
+	public List<Product> getByLimitAndOffset(Pageable pageable, @Param("name") String name);
 
 	@Query(nativeQuery = true, value = "select sum(product_flow.count) as productCount  from product   "
 			+ "left join product_flow on product.id = product_flow.product_id "
