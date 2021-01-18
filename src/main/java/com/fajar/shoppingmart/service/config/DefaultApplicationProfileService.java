@@ -102,6 +102,9 @@ public class DefaultApplicationProfileService {
 		if (notEmpty(appProfile.getColor())) {
 			actualAppProfile.setColor(appProfile.getColor());
 		}
+		if (notEmpty(appProfile.getContact())) {
+			actualAppProfile.setContact(appProfile.getContact());
+		}
 		if (notEmpty(appProfile.getFontColor())) {
 			actualAppProfile.setFontColor(appProfile.getFontColor());
 		}
