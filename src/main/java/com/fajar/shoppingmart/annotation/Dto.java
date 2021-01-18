@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.fajar.shoppingmart.dto.FormInputColumn;
+import com.fajar.shoppingmart.constants.FormInputColumn;
 
 @Retention(RetentionPolicy.RUNTIME)  
 @Target(ElementType.TYPE)  

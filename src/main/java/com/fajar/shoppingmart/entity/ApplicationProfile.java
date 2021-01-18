@@ -1,6 +1,6 @@
 package com.fajar.shoppingmart.entity;
 
-import static com.fajar.shoppingmart.dto.FieldType.FIELD_TYPE_TEXTAREA;
+import static com.fajar.shoppingmart.constants.FieldType.FIELD_TYPE_TEXTAREA;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +11,8 @@ import javax.persistence.Transient;
 
 import com.fajar.shoppingmart.annotation.Dto;
 import com.fajar.shoppingmart.annotation.FormField;
-import com.fajar.shoppingmart.dto.FieldType;
-import com.fajar.shoppingmart.dto.FontAwesomeIcon;
+import com.fajar.shoppingmart.constants.FieldType;
+import com.fajar.shoppingmart.constants.FontAwesomeIcon;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;

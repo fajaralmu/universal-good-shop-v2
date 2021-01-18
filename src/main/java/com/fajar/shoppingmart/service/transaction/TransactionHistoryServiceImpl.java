@@ -1,7 +1,7 @@
 package com.fajar.shoppingmart.service.transaction;
 
-import static com.fajar.shoppingmart.dto.TransactionType.PURCHASING;
-import static com.fajar.shoppingmart.dto.TransactionType.SELLING;
+import static com.fajar.shoppingmart.constants.TransactionType.PURCHASING;
+import static com.fajar.shoppingmart.constants.TransactionType.SELLING;
 import static com.fajar.shoppingmart.util.DateUtil.getDiffMonth;
 
 import java.util.ArrayList;
@@ -17,8 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.fajar.shoppingmart.annotation.CustomEntity;
+import com.fajar.shoppingmart.constants.TransactionType;
 import com.fajar.shoppingmart.dto.Filter;
-import com.fajar.shoppingmart.dto.TransactionType;
 import com.fajar.shoppingmart.dto.WebRequest;
 import com.fajar.shoppingmart.dto.WebResponse;
 import com.fajar.shoppingmart.entity.BaseEntity;

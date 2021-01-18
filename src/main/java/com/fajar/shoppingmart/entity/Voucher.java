@@ -8,8 +8,8 @@ import javax.persistence.Table;
 
 import com.fajar.shoppingmart.annotation.Dto;
 import com.fajar.shoppingmart.annotation.FormField;
-import com.fajar.shoppingmart.dto.FieldType;
-import com.fajar.shoppingmart.dto.VoucherType;
+import com.fajar.shoppingmart.constants.FieldType;
+import com.fajar.shoppingmart.constants.VoucherType;
 
 import lombok.Data;
 

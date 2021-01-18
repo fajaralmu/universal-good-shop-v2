@@ -1,8 +1,8 @@
 package com.fajar.shoppingmart.entity.custom;
 
-import com.fajar.shoppingmart.dto.CashType;
-import com.fajar.shoppingmart.dto.ReportCategory;
-import com.fajar.shoppingmart.dto.TransactionType;
+import com.fajar.shoppingmart.constants.CashType;
+import com.fajar.shoppingmart.constants.ReportCategory;
+import com.fajar.shoppingmart.constants.TransactionType;
 import com.fajar.shoppingmart.entity.ProductFlow;
 import com.fajar.shoppingmart.entity.Transaction;
 

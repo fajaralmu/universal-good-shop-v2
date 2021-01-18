@@ -14,7 +14,7 @@ import com.fajar.shoppingmart.annotation.AdditionalQuestionField;
 import com.fajar.shoppingmart.annotation.BaseField;
 import com.fajar.shoppingmart.annotation.Dto;
 import com.fajar.shoppingmart.annotation.FormField;
-import com.fajar.shoppingmart.dto.FieldType;
+import com.fajar.shoppingmart.constants.FieldType;
 import com.fajar.shoppingmart.entity.BaseEntity;
 import com.fajar.shoppingmart.util.CollectionUtil;
 import com.fajar.shoppingmart.util.EntityUtil;

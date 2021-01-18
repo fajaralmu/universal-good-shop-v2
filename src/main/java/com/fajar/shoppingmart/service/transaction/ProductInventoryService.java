@@ -2,8 +2,8 @@ package com.fajar.shoppingmart.service.transaction;
 
 import java.util.List;
 
-import com.fajar.shoppingmart.dto.TransactionMode;
-import com.fajar.shoppingmart.dto.TransactionType;
+import com.fajar.shoppingmart.constants.TransactionMode;
+import com.fajar.shoppingmart.constants.TransactionType;
 import com.fajar.shoppingmart.entity.Customer;
 import com.fajar.shoppingmart.entity.InventoryItem;
 import com.fajar.shoppingmart.entity.Product;

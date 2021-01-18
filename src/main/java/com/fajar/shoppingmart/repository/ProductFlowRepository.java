@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.fajar.shoppingmart.dto.TransactionType;
+import com.fajar.shoppingmart.constants.TransactionType;
 import com.fajar.shoppingmart.entity.ProductFlow;
 
 public interface ProductFlowRepository extends JpaRepository<ProductFlow, Long> {

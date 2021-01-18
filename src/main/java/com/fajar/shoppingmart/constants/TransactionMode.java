@@ -1,15 +1,15 @@
-package com.fajar.shoppingmart.dto;
+package com.fajar.shoppingmart.constants;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum TransactionType {
+public enum TransactionMode {
 
-	PURCHASING, SELLING;
-
+	REGULAR, RETURN;
+	
 	@JsonCreator
-	public static TransactionType forValue(String value) {
-		TransactionType[] enumKeys = values();
+	public static TransactionMode forValue(String value) {
+		TransactionMode[] enumKeys = values();
 		for (int i = 0; i < enumKeys.length; i++) {
 			if (enumKeys[i].toString().equals(value)) {
 				return enumKeys[i];
@@ -21,7 +21,7 @@ public enum TransactionType {
 
 	@JsonValue
 	public String toValue() {
-		TransactionType[] enumKeys = values();
+		TransactionMode[] enumKeys = values();
 		for (int i = 0; i < enumKeys.length; i++) {
 			if (enumKeys[i].equals(this)) {
 				return enumKeys[i].toString();

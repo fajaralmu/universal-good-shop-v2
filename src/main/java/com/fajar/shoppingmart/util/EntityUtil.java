@@ -1,6 +1,6 @@
 package com.fajar.shoppingmart.util;
 
-import static com.fajar.shoppingmart.dto.FieldType.FIELD_TYPE_FIXED_LIST;
+import static com.fajar.shoppingmart.constants.FieldType.FIELD_TYPE_FIXED_LIST;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;

@@ -16,7 +16,7 @@ import javax.persistence.Transient;
 
 import com.fajar.shoppingmart.annotation.Dto;
 import com.fajar.shoppingmart.annotation.FormField;
-import com.fajar.shoppingmart.dto.FieldType;
+import com.fajar.shoppingmart.constants.FieldType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;

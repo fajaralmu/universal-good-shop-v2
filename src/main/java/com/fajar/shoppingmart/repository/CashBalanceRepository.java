@@ -5,7 +5,7 @@ import java.util.Date;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.fajar.shoppingmart.dto.CashType;
+import com.fajar.shoppingmart.constants.CashType;
 import com.fajar.shoppingmart.entity.CashBalance;
 
 public interface CashBalanceRepository extends JpaRepository<CashBalance, Long> {

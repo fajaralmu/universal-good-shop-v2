@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 import com.fajar.shoppingmart.annotation.Dto;
 import com.fajar.shoppingmart.annotation.FormField;
-import com.fajar.shoppingmart.dto.FieldType;
+import com.fajar.shoppingmart.constants.FieldType;
 import com.fajar.shoppingmart.entity.custom.BalanceJournalInfo;
 import com.fajar.shoppingmart.entity.custom.FinancialEntity;
 import com.fajar.shoppingmart.entity.custom.JournalInfoCapitalFlow;

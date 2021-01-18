@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.fajar.shoppingmart.dto.TransactionType;
+import com.fajar.shoppingmart.constants.TransactionType;
 import com.fajar.shoppingmart.entity.Transaction;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {

@@ -3,8 +3,8 @@ package com.fajar.shoppingmart.entity.custom;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.fajar.shoppingmart.dto.CashType;
-import com.fajar.shoppingmart.dto.ReportCategory;
+import com.fajar.shoppingmart.constants.CashType;
+import com.fajar.shoppingmart.constants.ReportCategory;
 import com.fajar.shoppingmart.entity.CashBalance;
 
 import lombok.Data;

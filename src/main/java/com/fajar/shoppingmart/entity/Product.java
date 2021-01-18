@@ -14,8 +14,8 @@ import org.hibernate.annotations.Type;
 
 import com.fajar.shoppingmart.annotation.Dto;
 import com.fajar.shoppingmart.annotation.FormField;
-import com.fajar.shoppingmart.dto.FieldType;
-import com.fajar.shoppingmart.dto.FormInputColumn;
+import com.fajar.shoppingmart.constants.FieldType;
+import com.fajar.shoppingmart.constants.FormInputColumn;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

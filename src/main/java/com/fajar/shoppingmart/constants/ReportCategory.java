@@ -1,4 +1,4 @@
-package com.fajar.shoppingmart.dto;
+package com.fajar.shoppingmart.constants;
 
 public enum ReportCategory{
 	
