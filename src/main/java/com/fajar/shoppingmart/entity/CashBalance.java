@@ -18,7 +18,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Dto(updateService = "baseEntityUpdateService")
+@Dto(updateService = "baseEntityUpdateService",value="Balance Journal",editable = false)
 @Entity
 @Table(name="cash_balance")
 @Data
