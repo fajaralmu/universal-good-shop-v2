@@ -18,6 +18,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -37,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FileService {
 
+	private static final String ICON_BASE64_PREFIX = "data:image/ico;base64,";
 	@Autowired
 	private WebConfigService webAppConfiguration;
 	@Autowired
@@ -45,14 +47,12 @@ public class FileService {
 	private String uploadType;
 	@Value("${app.resources.apiUploadEndpoint}")
 	private String apiUploadEndpoint; 
-	private HttpHeaders headers = new HttpHeaders();
 	static ObjectMapper mapper = new ObjectMapper();
 	@Autowired
 	private ProgressService progressService;
+
 	@PostConstruct
 	public void init() {
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		 
 	}
 
 	int counter = 0;
@@ -65,24 +65,28 @@ public class FileService {
 		counter++;
 	}
 
-	public String writeIcon(String code, String data) throws IOException {
+	public String writeIcon(String code, String data, @Nullable HttpServletRequest httpServletRequest)
+			throws Exception {
+		System.out.println("Writing Icon with code: "+code);
 		String[] imageData = data.split(",");
 		if (imageData == null || imageData.length < 2) {
+			
+			System.out.println("Invalid icon image string: "+imageData);
 			return null;
 		}
 		// create a buffered image
 		String imageString = imageData[1];
-		BufferedImage image = null;
-		byte[] imageByte;
+		BufferedImage image = IconWriter.getImageFromBase64String(imageString);
+		
+		String iconName;
+		if ("api".equals(uploadType)) {
+			String iconBase64String = IconWriter.getIconBase64String(image);
+			iconName = writeImageApi("ICON_" + code, ICON_BASE64_PREFIX + iconBase64String, httpServletRequest);
+		} else {
+			iconName = "ICO_" + code + "_" + StringUtil.generateRandomNumber(10) + ".ico";
+			IconWriter.writeIcon(image, getPath() + "/ICON", iconName);
+		}
 
-		Base64.Decoder decoder = Base64.getDecoder();
-		imageByte = decoder.decode(imageString);
-		ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
-		image = ImageIO.read(bis);
-		bis.close();
-
-		String iconName = IconWriter.writeIcon(image, getPath() + "/ICON");
-//		storeFtp(imageString, imageFileName)
 		return iconName;
 
 	}
@@ -90,7 +94,9 @@ public class FileService {
 	public synchronized String writeImage(String code, String data) throws IOException {
 		return writeImage(code, data, null);
 	}
-		public synchronized String writeImage(String code, String data, HttpServletRequest httpServletRequest) throws IOException {
+
+	public synchronized String writeImage(String code, String data, HttpServletRequest httpServletRequest)
+			throws IOException {
 		log.info("#uploadType: {}", uploadType);
 		if ("ftp".equals(uploadType)) {
 			return writeImageFtp(code, data);
@@ -103,41 +109,43 @@ public class FileService {
 	}
 
 	private String writeImageApi(String code, String data, HttpServletRequest httpServletRequest) {
-		String[] imageData = data.split(",");
-		if (imageData == null || imageData.length < 2) {
+		String[] imageDataSplitted = data.split(",");
+		System.out.println("writeImageApi with code: "+code);
+		if (imageDataSplitted == null || imageDataSplitted.length < 2) {
+			System.out.println("Invalid image string: "+data);
 			return null;
 		}
 		progressService.sendProgress(10, httpServletRequest);
 		// extract image name
-		String imageIdentity = imageData[0];
+		String imageIdentity = imageDataSplitted[0];
 		String imageType = imageIdentity.replace("data:image/", "").replace(";base64", "");
 		String randomId = String.valueOf(new Date().getTime()) + StringUtil.generateRandomNumber(5) + "_"
 				+ getCounter();
 		progressService.sendProgress(10, httpServletRequest);
 		String imageFileName = code + "_" + randomId + "." + imageType;
 		addCounter();
-		 
+
 		System.out.println("Post file to :" + apiUploadEndpoint);
 		try {
 			List<AttachmentInfo> attachments = AttachmentInfo.extractAttachmentInfos(data, imageFileName, imageType);
 			for (int i = 0; i < attachments.size(); i++) {
-				String response = uploadViaAPIv2( attachments.get(i), apiUploadEndpoint);
-				System.out.println("response: "+ i+ " => " + response);
+				String response = uploadViaAPIv2(attachments.get(i), apiUploadEndpoint);
+				System.out.println("response: " + i + " => " + response);
 				progressService.sendProgress(1, attachments.size(), 80, httpServletRequest);
 			}
 			progressService.sendComplete(httpServletRequest);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return imageFileName;
-	} 
+	}
 
 	public static void main(String[] args) throws Exception {
 		AttachmentInfo request = (AttachmentInfo.builder().name("TEST.jpg").data("dddd").extension("jpg").build());
 	}
 
-	public static String uploadViaAPIv2(  AttachmentInfo request, String url) {
+	public static String uploadViaAPIv2(AttachmentInfo request, String url) {
 
 		LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 		String response;
@@ -173,7 +181,7 @@ public class FileService {
 		if (imageData == null || imageData.length < 2) {
 			return null;
 		}
-		
+
 		String imageString = imageData[1];
 
 		// extract image name
@@ -192,12 +200,12 @@ public class FileService {
 
 	public synchronized String writeImageToDisk(String code, String data) throws IOException {
 
-		String[] imageData = data.split(",");
-		if (imageData == null || imageData.length < 2) {
+		String[] imageDataSplitted = data.split(",");
+		if (imageDataSplitted == null || imageDataSplitted.length < 2) {
 			return null;
 		}
 		// create a buffered image
-		String imageString = imageData[1];
+		String imageString = imageDataSplitted[1];
 		BufferedImage image = null;
 		byte[] imageByte;
 
@@ -208,7 +216,7 @@ public class FileService {
 		bis.close();
 
 		// write the image to a file
-		String imageIdentity = imageData[0];
+		String imageIdentity = imageDataSplitted[0];
 		String imageType = imageIdentity.replace("data:image/", "").replace(";base64", "");
 		String randomId = String.valueOf(new Date().getTime()) + StringUtil.generateRandomNumber(5) + "_"
 				+ getCounter();

@@ -177,12 +177,12 @@ public class BaseEntityUpdateService<T extends BaseEntity> {
 		if (null != base64Value && base64Value.toString().trim().isEmpty() == false) {
 			try {
 				if(isIcon) {
-					fileName = fileService.writeIcon(object.getClass().getSimpleName(), base64Value.toString());
+					fileName = fileService.writeIcon(object.getClass().getSimpleName(), base64Value.toString(), null);
 				}else {
 					fileName = fileService.writeImage(object.getClass().getSimpleName(), base64Value.toString());
 				}
 				
-			} catch (IOException e) {
+			} catch (Exception e) {
 				log.error("Error writing image for {}", object.getClass().getSimpleName());
 				e.printStackTrace();
 			}

@@ -1,6 +1,7 @@
 package com.fajar.shoppingmart.util;
 
 import java.math.BigDecimal;
+import java.util.Base64;
 import java.util.Random;
  
 public class StringUtil {
@@ -134,9 +135,13 @@ public class StringUtil {
 	}
 	
 	public static void main(String[] args) {
-		String[] divided = divideStringInto("12345678912345", 3);
-		for (int i = 0; i < divided.length; i++) {
-			System.out.println(divided[i]);
-		}
+		byte[] b = new byte[] {1,0,0,0,0,0,0,0,0};
+		System.out.println(toBase64(b));
+	}
+
+
+	public static String toBase64(byte[] src) {
+		byte[] encoded = Base64.getEncoder().encode(src);
+		return new String(encoded);
 	}
 }

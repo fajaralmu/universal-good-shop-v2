@@ -112,11 +112,18 @@ public class DefaultApplicationProfileService {
 			try {
 				String backgroundUrl = fileService.writeImage(ApplicationProfile.class.getSimpleName(), appProfile.getBackgroundUrl(), httpServletRequest);
 				actualAppProfile.setBackgroundUrl(backgroundUrl );
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			} catch ( Exception e) {
 				e.printStackTrace();
 			}
 			
+		}
+		if (notEmpty(appProfile.getPageIcon()) && appProfile.getPageIcon().startsWith("data:image")) {
+			try {
+				String iconUrl = fileService.writeIcon(ApplicationProfile.class.getSimpleName(), appProfile.getPageIcon(), httpServletRequest);
+				actualAppProfile.setPageIcon(iconUrl );
+			} catch ( Exception e) {
+				e.printStackTrace();
+			}
 		}
 //		if (notEmpty(appProfile.getName())) {
 //			actualAppProfile.setName(appProfile.getName());

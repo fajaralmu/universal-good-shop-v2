@@ -26,6 +26,7 @@ public class SessionUtil {
 	public static final String HEADER_REQUEST_TOKEN = "requestToken";
 
 	public static String getPageRequestId(HttpServletRequest httpServletRequest) {
+		if (null == httpServletRequest) {return "";}
 		String pageRequest = httpServletRequest.getHeader(PAGE_REQUEST_ID);
 		log.info("Page request id: " + pageRequest);
 		return pageRequest;
