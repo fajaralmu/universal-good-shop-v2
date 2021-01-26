@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
-public class Product extends BaseEntity {
+public class Product extends BaseEntity implements MultipleImageModel {
 
 	/**
 	* 
@@ -81,6 +81,17 @@ public class Product extends BaseEntity {
 	public void setCount(int count) {
 		log.debug(this.name+" Count: "+ count);
 		this.count = count;
+	}
+
+	@Override
+	public void setImageNames(String[] image) {
+		this.imageUrl = String.join("~", image);
+	}
+
+	@Override
+	public String[] getImageNames() {
+		if (null == imageUrl) { return new String[] {};}
+		return imageUrl.split("~");
 	}
 
 }

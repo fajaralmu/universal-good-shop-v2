@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class BaseEntityUpdateService<T extends BaseEntity> {
 		LogProxyFactory.setLoggers(this);
 	}
 
-	public WebResponse saveEntity(T baseEntity, boolean newRecord ) throws Exception {
+	public WebResponse saveEntity(T baseEntity, boolean newRecord, HttpServletRequest httpServletRequest ) throws Exception {
 		log.error("saveEntity Method not implemented");
 		return WebResponse.failed("method not implemented");
 	}

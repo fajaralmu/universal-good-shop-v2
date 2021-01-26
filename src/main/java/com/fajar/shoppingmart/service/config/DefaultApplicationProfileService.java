@@ -1,7 +1,5 @@
 package com.fajar.shoppingmart.service.config;
 
-import java.io.IOException;
-
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DefaultApplicationProfileService {
 
+	
 	@Autowired
 	private AppProfileRepository appProfileRepository;
 	@Autowired

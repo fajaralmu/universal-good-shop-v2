@@ -24,32 +24,27 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Builder.Default;
-
-@Dto(commonManagementPage = false, updateService = "userUpdateService")
+ 
 @Entity
 @Table(name = "users")
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends BaseEntity {
+public class User extends BaseEntity implements SingleImageModel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3896877759244837620L;
-	@Column(unique = true)
-	@FormField
+	@Column(unique = true) 
 	private String username;
-	@Column(name = "display_name")
-	@FormField
+	@Column(name = "display_name") 
 	private String displayName;
-	@Column
-	@FormField
+	@Column 
 //	@JsonIgnore
 	private String password;
-
-	@FormField(type = FieldType.FIELD_TYPE_IMAGE, required = false, defaultValue = "DefaultIcon.BMP")
+ 
 	@Column(name = "profile_image")
 	private String profileImage;
 
@@ -71,6 +66,17 @@ public class User extends BaseEntity {
 	@Transient
 	@JsonIgnore
 	private Date processingDate; // for transaction
+
+	@Override
+	public void setImage(String image) {
+		this.profileImage = image;
+	}
+
+	@Override
+	public String getImage() {
+		 
+		return profileImage;
+	}
 
 	 
 

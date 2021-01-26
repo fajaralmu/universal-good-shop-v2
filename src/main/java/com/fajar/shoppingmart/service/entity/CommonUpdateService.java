@@ -1,5 +1,7 @@
 package com.fajar.shoppingmart.service.entity;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Service;
 
 import com.fajar.shoppingmart.dto.WebResponse;
@@ -13,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CommonUpdateService extends BaseEntityUpdateService<BaseEntity> {
 
 	@Override
-	public WebResponse saveEntity(BaseEntity entity, boolean newRecord) {
+	public WebResponse saveEntity(BaseEntity entity, boolean newRecord, HttpServletRequest httpServletRequest) {
 		log.info("saving entity: {}", entity.getClass());
 		entity = copyNewElement(entity, newRecord);
 

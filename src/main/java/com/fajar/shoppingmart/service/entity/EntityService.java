@@ -91,7 +91,7 @@ public class EntityService {
 				
 				if (entityValue != null) {
 					boolean isUser = newRecord? false: checkIfUser(entityValue, servletRequest);
-					WebResponse saved = updateService.saveEntity((BaseEntity) entityValue, newRecord);
+					WebResponse saved = updateService.saveEntity((BaseEntity) entityValue, newRecord, servletRequest);
 					
 
 					if (saved.isSuccess()) {

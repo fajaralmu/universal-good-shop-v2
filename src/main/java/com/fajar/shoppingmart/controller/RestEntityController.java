@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fajar.shoppingmart.annotation.CustomRequestInfo;
 import com.fajar.shoppingmart.dto.WebRequest;
 import com.fajar.shoppingmart.dto.WebResponse;
 import com.fajar.shoppingmart.entity.setting.EntityProperty;
@@ -43,12 +44,14 @@ public class RestEntityController extends BaseController {
 	}
 
 	@PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@CustomRequestInfo(withRealtimeProgress = true)
 	public WebResponse add(@RequestBody WebRequest request, HttpServletRequest httpRequest) {
 		log.info("add entity {}", request.getEntity());
 		return entityService.saveEntity(request, httpRequest, true);
 	}
 
 	@PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@CustomRequestInfo(withRealtimeProgress = true)
 	public WebResponse update(@RequestBody WebRequest request, HttpServletRequest httpRequest) {
 		log.info("register update {}", request.getEntity());
 		return entityService.saveEntity(request, httpRequest, false);

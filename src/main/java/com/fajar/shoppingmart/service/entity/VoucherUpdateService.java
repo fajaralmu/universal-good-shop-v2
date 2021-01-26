@@ -2,6 +2,8 @@ package com.fajar.shoppingmart.service.entity;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,7 @@ public class VoucherUpdateService extends BaseEntityUpdateService<Voucher>{
 	private CustomerRepository customerRepository; 
 	 
 	@Override
-	public WebResponse saveEntity(Voucher baseEntity, boolean newRecord) {
+	public WebResponse saveEntity(Voucher baseEntity, boolean newRecord,   HttpServletRequest httpServletRequest) {
 		
 		Voucher voucher = (Voucher) baseEntity;
 		if(newRecord) {

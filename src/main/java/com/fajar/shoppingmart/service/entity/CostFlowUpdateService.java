@@ -1,5 +1,7 @@
 package com.fajar.shoppingmart.service.entity;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +16,7 @@ public class CostFlowUpdateService extends BaseEntityUpdateService<CostFlow>{
 	private CashBalanceService cashBalanceService;
 	
 	@Override
-	public WebResponse saveEntity(CostFlow entity, boolean newRecord) {
+	public WebResponse saveEntity(CostFlow entity, boolean newRecord, HttpServletRequest httpServletRequest) {
 		CostFlow costFlow =  copyNewElement(entity, newRecord); 
 		
 //		if(newRecord) {
