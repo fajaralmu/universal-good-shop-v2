@@ -249,7 +249,7 @@ public class ProductServiceImpl implements ProductService{
 		List<String> finalImageNames = new ArrayList<>();
 		for (Product product : productList) {
 
-			String[] imageUrls = product.getImageUrl().toString().split("~");
+			String[] imageUrls = product.getImageNamesArray();
 
 			for (int i = 0; i < imageUrls.length; i++) {
 				imageUrls[i] = imagebasePath + imageUrls[i];

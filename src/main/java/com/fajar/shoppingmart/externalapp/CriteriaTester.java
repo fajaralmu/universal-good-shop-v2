@@ -112,7 +112,7 @@ public class CriteriaTester {
 				charCount.put(firstChar, count+1);
 				System.out.println(i + " - " + name);
 				if (testSession.get(Unit.class, obj.getUnit().getId()) == null) {
-					obj.setImageUrl(null);
+					obj.setImageNames (null);
 					String unitName = obj.getUnit().getName()+" new "+i;
 					obj.getUnit().setName(unitName);
 					testSession.save(obj.getUnit());

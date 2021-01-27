@@ -1,8 +1,5 @@
 package com.fajar.shoppingmart.service.entity;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,8 +35,8 @@ public class ProductUpdateService extends BaseEntityUpdateService<Product> {
 	 */
 	@Override
 	public WebResponse saveEntity(Product baseEntity, boolean newRecord, HttpServletRequest httpServletRequest) throws Exception {
-
-		Product product = (Product) copyNewElement(baseEntity, newRecord);
+	 
+		Product product =  copyNewElement(baseEntity, newRecord);
 		Optional<Product> dbProduct = Optional.empty();
 		if (!newRecord) {
 			dbProduct = productRepository.findById(product.getId());
@@ -48,7 +45,7 @@ public class ProductUpdateService extends BaseEntityUpdateService<Product> {
 				throw new Exception("Existing record not found");
 			}
 		}
-		String imageData = product.getImageUrl();
+		final String imageData = product.getImageNames();
 		if (imageData != null && !imageData.equals("")) {
 			log.info("product image will be updated");
 			String imageUrl = null;
@@ -57,11 +54,11 @@ public class ProductUpdateService extends BaseEntityUpdateService<Product> {
 			} else {
 				imageUrl = imageUploadService.updateImages(product, dbProduct.get(), httpServletRequest);
 			}
-			product.setImageUrl(imageUrl);
+			product.setImageNames(imageUrl);
 		} else {
 			log.info("Product image wont be updated");
 			if (!newRecord) {
-				product.setImageUrl(dbProduct.get().getImageUrl());
+				product.setImageNamesArray(dbProduct.get().getImageNamesArray());
 			}
 		}
 

@@ -324,13 +324,13 @@ public class EntityUtil {
 	 * @param withId
 	 * @return
 	 */
-	public static <T extends BaseEntity> T copyFieldElementProperty(BaseEntity source, Class<T> targetClass,
+	public static <T extends BaseEntity> T copyFieldElementProperty(T source,
 			boolean withId) {
-		log.info("Will Copy Class :" + targetClass.getCanonicalName());
+		log.info("Will Copy Class :" + source.getClass().getCanonicalName());
 
 		T targetObject = null;
 		try {
-			targetObject = targetClass.newInstance();
+			targetObject = (T) source.getClass().newInstance();
 
 		} catch (Exception e) {
 			log.error("Error when create instance");
@@ -347,7 +347,7 @@ public class EntityUtil {
 				continue;
 			}
 
-			Field currentField = getDeclaredField(targetClass, field.getName());
+			Field currentField = getDeclaredField(source.getClass(), field.getName());
 
 			if (currentField == null)
 				continue;

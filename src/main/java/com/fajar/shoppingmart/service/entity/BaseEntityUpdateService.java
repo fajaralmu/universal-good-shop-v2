@@ -46,7 +46,7 @@ public class BaseEntityUpdateService<T extends BaseEntity> {
 
 	protected T copyNewElement(T source, boolean newRecord) {
 		try {
-			return (T) EntityUtil.copyFieldElementProperty(source, source.getClass(), !newRecord);
+			return  EntityUtil.copyFieldElementProperty(source,  !newRecord);
 		}catch (Exception e) {
 			log.error("Error copy new element");
 			e.printStackTrace();
